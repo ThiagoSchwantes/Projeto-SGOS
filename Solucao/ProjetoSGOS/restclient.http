@@ -1,0 +1,40 @@
+@base_url=http://localhost:5223
+
+# CLIENTE ######################################
+
+### Criação de um novo CLIENTE
+POST {{base_url}}/cliente/cadastrar
+Content-Type: application/json
+{
+    "nome": "Arnaldo de Almeida",
+    "cpf" : "12345678910",
+    "rg" : "123456789",
+    "cep" : "81220450",
+    "endereco" : "rua mario souza francisco 220",
+    "bairro" : "boqueirão",
+    "cidade" : "curitiba",
+    "telefone" : "41999889988"
+}
+
+### Obtenção de todos os funcionários
+GET {{base_url}}/funcionario/listar
+
+# FOLHA ############################################
+
+### Criação de uma nova folha
+POST {{base_url}}/folha/cadastrar
+Content-Type: application/json
+
+{
+    "valor": 50,
+    "quantidade" : 1000,
+    "mes" : 10,
+    "ano" : 2023,
+    "funcionarioId" : 1
+}
+
+### Obtenção de todas as folhas
+GET {{base_url}}/folha/listar
+
+### Obtenção de uma folha
+GET {{base_url}}/folha/buscar/12345678912/10/2023
