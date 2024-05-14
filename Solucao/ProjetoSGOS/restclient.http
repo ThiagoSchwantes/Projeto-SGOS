@@ -1,8 +1,7 @@
 @base_url= http://localhost:5223
 
 # CLIENTE ######################################
-
-### Criação de um novo CLIENTE
+###criar cliente
 POST {{base_url}}/clientes/cadastrar
 Content-Type: application/json
 
@@ -20,35 +19,36 @@ Content-Type: application/json
     
     {
         "nome": "Vinicius Ferreira Geraldo",
-        "cpf" : "12345678910",
-        "rg" : "123456789",
-        "cep" : "81220450",
-        "endereco" : "rua mario souza francisco 220",
-        "bairro" : "boqueirão",
-        "cidade" : "curitiba",
-        "telefone" : "41999889988"
+        "cpf" : "0957261901",
+        "rg" : "109103500",
+        "cep" : "81333900",
+        "endereco" : "rua caronel tadalafila 850",
+        "bairro" : "campo cumprido",
+        "cidade" : "paranagua",
+        "telefone" : "41986861122"
     }
 ]
 
-### Obtenção de todos os funcionários
-GET {{base_url}}/funcionario/listar
+### listar cliente
+GET {{base_url}}/clientes/listar
 
-# FOLHA ############################################
-
-### Criação de uma nova folha
-POST {{base_url}}/folha/cadastrar
+### alterar cliente
+PUT {{base_url}}/clientes/alterar/12345678910
 Content-Type: application/json
 
 {
-    "valor": 50,
-    "quantidade" : 1000,
-    "mes" : 10,
-    "ano" : 2023,
-    "funcionarioId" : 1
+    "nome": "Marcos Lopes",
+    "cpf" : "83374465510",
+    "rg" : "999999999",
+    "cep" : "82666300",
+    "endereco" : "rua jose alfredo lopes 850",
+    "bairro" : "fazendinha",
+    "cidade" : "Londrina",
+    "telefone" : "41984562020"
 }
 
-### Obtenção de todas as folhas
-GET {{base_url}}/folha/listar
+### deletar cliente
+DELETE {{base_url}}/clientes/deletar/12345678910
 
 ### Obtenção de uma folha
 GET {{base_url}}/folha/buscar/12345678912/10/2023
