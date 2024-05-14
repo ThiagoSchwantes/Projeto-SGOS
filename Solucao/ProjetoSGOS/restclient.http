@@ -1,20 +1,34 @@
-@base_url=http://localhost:5223
+@base_url= http://localhost:5223
 
 # CLIENTE ######################################
 
 ### Criação de um novo CLIENTE
-POST {{base_url}}/cliente/cadastrar
+POST {{base_url}}/clientes/cadastrar
 Content-Type: application/json
-{
-    "nome": "Arnaldo de Almeida",
-    "cpf" : "12345678910",
-    "rg" : "123456789",
-    "cep" : "81220450",
-    "endereco" : "rua mario souza francisco 220",
-    "bairro" : "boqueirão",
-    "cidade" : "curitiba",
-    "telefone" : "41999889988"
-}
+
+[
+    {
+        "nome": "Thiago Schwantes",
+        "cpf" : "12345678910",
+        "rg" : "123456789",
+        "cep" : "81220450",
+        "endereco" : "rua mario souza francisco 220",
+        "bairro" : "boqueirão",
+        "cidade" : "curitiba",
+        "telefone" : "41999889988"
+    },
+    
+    {
+        "nome": "Vinicius Ferreira Geraldo",
+        "cpf" : "12345678910",
+        "rg" : "123456789",
+        "cep" : "81220450",
+        "endereco" : "rua mario souza francisco 220",
+        "bairro" : "boqueirão",
+        "cidade" : "curitiba",
+        "telefone" : "41999889988"
+    }
+]
 
 ### Obtenção de todos os funcionários
 GET {{base_url}}/funcionario/listar

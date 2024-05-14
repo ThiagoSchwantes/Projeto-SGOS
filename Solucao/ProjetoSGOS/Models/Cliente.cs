@@ -7,11 +7,11 @@ public class Cliente
     public string? RG { get;set; }
     public DateTime DataCadastro { get; set; }
 
-    public int Cep { get; set; }
+    public string Cep { get; set; }
     public string? Endereco { get; set; }
     public string? Bairro { get; set; }
     public string? Cidade { get; set; }
-    public int Telefone { get; set; }
+    public string? Telefone { get; set; }
 
     public Cliente()
     {

@@ -10,11 +10,15 @@ var app = builder.Build();
 
 app.MapGet("/", () => "Hello World!");
 
-app.MapPost("/cliente/cadastrar", ([FromBody] Cliente cliente, [FromServices] AppDbContext ctx) => 
-{
-    ctx.Clientes.Add(cliente);
+app.MapPost("/clientes/cadastrar", ([FromBody] Cliente[] clientes, [FromServices] AppDbContext ctx) => 
+{   
+    foreach (Cliente cliente in clientes)
+    {
+        ctx.Clientes.Add(cliente);
+    }
+    
     ctx.SaveChanges();
-    return Results.Created("",cliente);
+    return Results.Created("",clientes);
 });
 
 
