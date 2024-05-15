@@ -69,10 +69,10 @@ Content-Type: application/json
     }
 ]
 
-### listar cliente
+### listar produto
 GET {{base_url}}/produto/listar
 
-### alterar cliente
+### alterar produto
 PUT {{base_url}}/produto/alterar/a8dbd926-bb9f-4946-a73f-3465f2496da3
 Content-Type: application/json
 
@@ -83,5 +83,98 @@ Content-Type: application/json
     
 }
 
-### deletar cliente
+### deletar produto
 DELETE {{base_url}}/produto/deletar/a8dbd926-bb9f-4946-a73f-3465f2496da3
+
+# ACABAMENTO ######################################
+###criar acabamento
+POST {{base_url}}/acabamentos/cadastrar
+Content-Type: application/json
+
+[
+    {
+        "nome": "acabamento de adesivo",
+        "descricao" : "refile com estilete pequeno na linha de corte e aplicação se necessario"
+    },
+    
+    {
+        "nome": "acabamento de banner",
+        "descricao" : "refile com estilete grande,solda com maquina de solda,grampeia as madeiras e bambante encima e embaixo,depois coloca a ponteira e grampeia."
+    }
+]
+
+### listar acabamento
+GET {{base_url}}/acabamentos/listar
+
+### alterar acabamento
+PUT {{base_url}}/acabamentos/alterar/ce75079c-b84f-4a64-80c8-6101a0b5afa2
+Content-Type: application/json
+
+{
+    "nome": "acabamento em lona",
+    "descricao" : "solda com a maquina de solda e depois passa ela pela maquina de ilhós."
+}
+
+### deletar acabamento
+DELETE {{base_url}}/acabamentos/deletar/ce75079c-b84f-4a64-80c8-6101a0b5afa2
+
+# EQUIPAMENTO ######################################
+###criar equipamento
+POST {{base_url}}/equipamentos/cadastrar
+Content-Type: application/json
+
+[
+    {
+        "nome": "My Jet",
+        "descricao" : "Maquina de impressão para grandes formatos,com capacidade de ate 3.20 de largura, 8 cabeças com tinta a base de solvente."
+    },
+    
+    {
+        "nome": "Rolland",
+        "descricao" : "Maquina de impressão para impressão de adesivo com 4 cabeças e tinta a base de solvente."
+    }
+]
+
+### listar equipamento
+GET {{base_url}}/equipamentos/listar
+
+### alterar equipamento
+PUT {{base_url}}/equipamentos/alterar/dfabb9d2-ce78-4a1f-834b-b1aa51df04aa
+Content-Type: application/json
+
+{
+    "nome": "Plotter",
+    "descricao" : "Maquina para corte de adesivo e corte contorno após impressão."
+}
+
+### deletar equipamento
+DELETE {{base_url}}/equipamentos/deletar/dfabb9d2-ce78-4a1f-834b-b1aa51df04aa
+
+# PAGAMENTO ######################################
+###criar pagamento
+POST {{base_url}}/pagamentos/cadastrar
+Content-Type: application/json
+
+[
+    {
+        "formaDePagamento": "dinheiro"
+    },
+    
+    {
+        "formaDePagamento": "cartão de crédito"
+    }
+]
+
+### listar pagamento
+GET {{base_url}}/pagamentos/listar
+
+### alterar pagamento
+PUT {{base_url}}/pagamentos/alterar/224411f7-4f2e-4758-8b34-eb3d5e68668c
+Content-Type: application/json
+
+{
+    "formaDePagamento": "cartão de débito"
+}
+
+### deletar pagamento
+DELETE {{base_url}}/pagamentos/deletar/a93dadf6-adf7-4cd3-8ca5-fea07baab617

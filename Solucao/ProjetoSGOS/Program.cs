@@ -63,7 +63,7 @@ app.MapDelete("/clientes/deletar/{cpf}",([FromRoute] string cpf, [FromServices] 
 });
 //---------------------------------------------------------------------------------------------------------
 //cadastrando Produto
-app.MapPost("/produto/cadastrar", ([FromBody] Produto[] produtos, [FromServices] AppDbContext ctx) => 
+app.MapPost("/produtos/cadastrar", ([FromBody] Produto[] produtos, [FromServices] AppDbContext ctx) => 
 {   
     foreach (Produto produto in produtos)
     {
@@ -73,8 +73,8 @@ app.MapPost("/produto/cadastrar", ([FromBody] Produto[] produtos, [FromServices]
     ctx.SaveChanges();
     return Results.Created("",produtos);
 });
-//listando clientes
-app.MapGet("/produto/listar",([FromServices] AppDbContext ctx) =>
+//listando Produto
+app.MapGet("/produtos/listar",([FromServices] AppDbContext ctx) =>
 {
     if (ctx.Produtos.Any())
     {
@@ -82,8 +82,8 @@ app.MapGet("/produto/listar",([FromServices] AppDbContext ctx) =>
     }
     return Results.NotFound("Tabela vazia!");
 });
-//alterar clientes
-app.MapPut("/produto/alterar/{id}",([FromRoute] string id, [FromBody] Produto produtoAlterado, [FromServices] AppDbContext ctx) =>
+//alterar Produto
+app.MapPut("/produtos/alterar/{id}",([FromRoute] string id, [FromBody] Produto produtoAlterado, [FromServices] AppDbContext ctx) =>
 {
     Produto? produto = ctx.Produtos.FirstOrDefault(c => c.ProdutoId == id);
     if (produto is null){
@@ -99,8 +99,8 @@ app.MapPut("/produto/alterar/{id}",([FromRoute] string id, [FromBody] Produto pr
     ctx.SaveChanges();
     return Results.Ok("Produto alterado com sucesso!");
 });
-//deletar cliente
-app.MapDelete("/produto/deletar/{id}",([FromRoute] string id, [FromServices] AppDbContext ctx) =>
+//deletar Produto
+app.MapDelete("/produtos/deletar/{id}",([FromRoute] string id, [FromServices] AppDbContext ctx) =>
 {
     Produto? produto = ctx.Produtos.FirstOrDefault(c => c.ProdutoId == id);
     if (produto is null)
@@ -112,6 +112,147 @@ app.MapDelete("/produto/deletar/{id}",([FromRoute] string id, [FromServices] App
     return Results.Ok("Produto deletado com sucesso!");
 });
 //-------------------------------------------------------------------------------------------------------
+//cadastrando acabamento
+app.MapPost("/acabamentos/cadastrar", ([FromBody] Acabamento[] acabamentos, [FromServices] AppDbContext ctx) => 
+{   
+    foreach (Acabamento acabamento in acabamentos)
+    {
+        ctx.Acabamentos.Add(acabamento);
+    }
+    
+    ctx.SaveChanges();
+    return Results.Created("",acabamentos);
+});
+//listando acabamento
+app.MapGet("/acabamentos/listar",([FromServices] AppDbContext ctx) =>
+{
+    if (ctx.Acabamentos.Any())
+    {
+        return Results.Ok(ctx.Acabamentos.ToList());
+    }
+    return Results.NotFound("Tabela vazia!");
+});
+//alterar acabamento
+app.MapPut("/acabamentos/alterar/{id}",([FromRoute] string id, [FromBody] Acabamento acabamentoAlterado, [FromServices] AppDbContext ctx) =>
+{
+    Acabamento? acabamento = ctx.Acabamentos.FirstOrDefault(c => c.AcabamentoId == id);
+    if (acabamento is null){
+        return Results.NotFound("Acabamento não encontrado!");
+    }
 
+    acabamento.Nome = acabamentoAlterado.Nome;
+    acabamento.Descricao = acabamentoAlterado.Descricao;
+
+    ctx.Acabamentos.Update(acabamento);
+    ctx.SaveChanges();
+    return Results.Ok("Acabamento alterado com sucesso!");
+});
+//deletar acabamento
+app.MapDelete("/acabamentos/deletar/{id}",([FromRoute] string id, [FromServices] AppDbContext ctx) =>
+{
+    Acabamento? acabamento = ctx.Acabamentos.FirstOrDefault(c => c.AcabamentoId == id);    
+    if (acabamento is null)
+    {
+        return Results.NotFound("Acabamento não encontrado!");
+    }
+    ctx.Acabamentos.Remove(acabamento);
+    ctx.SaveChanges();
+    return Results.Ok("Acabamento deletado com sucesso!");
+});
+//-------------------------------------------------------------------------------------------------------
+//cadastrando equipamento
+app.MapPost("/equipamentos/cadastrar", ([FromBody] Equipamento[] equipamentos, [FromServices] AppDbContext ctx) => 
+{   
+    foreach (Equipamento equipamento in equipamentos)
+    {
+        ctx.Equipamentos.Add(equipamento);
+    }
+    
+    ctx.SaveChanges();
+    return Results.Created("",equipamentos);
+});
+//listando equipamento
+app.MapGet("/equipamentos/listar",([FromServices] AppDbContext ctx) =>
+{
+    if (ctx.Equipamentos.Any())
+    {
+        return Results.Ok(ctx.Equipamentos.ToList());
+    }
+    return Results.NotFound("Tabela vazia!");
+});
+//alterar equipamento
+app.MapPut("/equipamentos/alterar/{id}",([FromRoute] string id, [FromBody] Equipamento equipamentoAlterado, [FromServices] AppDbContext ctx) =>
+{
+    Equipamento? equipamento = ctx.Equipamentos.FirstOrDefault(c => c.EquipamentoId == id);
+    if (equipamento is null){
+        return Results.NotFound("Equipamento não encontrado!");
+    }
+
+    equipamento.Nome = equipamentoAlterado.Nome;
+    equipamento.Descricao = equipamentoAlterado.Descricao;
+
+    ctx.Equipamentos.Update(equipamento);
+    ctx.SaveChanges();
+    return Results.Ok("Equipamento alterado com sucesso!");
+});
+//deletar equipamento
+app.MapDelete("/equipamentos/deletar/{id}",([FromRoute] string id, [FromServices] AppDbContext ctx) =>
+{
+    Equipamento? equipamento = ctx.Equipamentos.FirstOrDefault(c => c.EquipamentoId == id);
+    if (equipamento is null)
+    {
+        return Results.NotFound("Equipamento não encontrado!");
+    }
+    ctx.Equipamentos.Remove(equipamento);
+    ctx.SaveChanges();
+    return Results.Ok("Equipamento deletado com sucesso!");
+});
+//-------------------------------------------------------------------------------------------------------
+//cadastrando pagamento
+app.MapPost("/pagamentos/cadastrar", ([FromBody] Pagamento[] pagamentos, [FromServices] AppDbContext ctx) => 
+{   
+    foreach (Pagamento pagamento in pagamentos)
+    {
+        ctx.Pagamentos.Add(pagamento);
+    }
+    
+    ctx.SaveChanges();
+    return Results.Created("",pagamentos);
+});
+//listando pagamento
+app.MapGet("/pagamentos/listar",([FromServices] AppDbContext ctx) =>
+{
+    if (ctx.Pagamentos.Any())
+    {
+        return Results.Ok(ctx.Pagamentos.ToList());
+    }
+    return Results.NotFound("Tabela vazia!");
+});
+//alterar pagamento
+app.MapPut("/pagamentos/alterar/{id}",([FromRoute] string id, [FromBody] Pagamento pagamentoAlterado, [FromServices] AppDbContext ctx) =>
+{
+    Pagamento? pagamento = ctx.Pagamentos.FirstOrDefault(c => c.PagamentoId == id);
+    if (pagamento is null){
+        return Results.NotFound("Pagamento não encontrado!");
+    }
+
+    pagamento.FormaDePagamento = pagamentoAlterado.FormaDePagamento;
+
+    ctx.Pagamentos.Update(pagamento);
+    ctx.SaveChanges();
+    return Results.Ok("Pagamento alterado com sucesso!");
+});
+//deletar pagamento
+app.MapDelete("/pagamentos/deletar/{id}",([FromRoute] string id, [FromServices] AppDbContext ctx) =>
+{
+    Pagamento? pagamento = ctx.Pagamentos.FirstOrDefault(c => c.PagamentoId == id);
+    if (pagamento is null)
+    {
+        return Results.NotFound("Pagamento não encontrado!");
+    }
+    ctx.Pagamentos.Remove(pagamento);
+    ctx.SaveChanges();
+    return Results.Ok("Pagamento deletado com sucesso!");
+});
 
 app.Run();
