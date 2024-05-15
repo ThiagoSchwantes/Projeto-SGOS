@@ -254,5 +254,55 @@ app.MapDelete("/pagamentos/deletar/{id}",([FromRoute] string id, [FromServices] 
     ctx.SaveChanges();
     return Results.Ok("Pagamento deletado com sucesso!");
 });
+//-------------------------------------------------------------------------------------------------------
+//cadastrando funcionario
+app.MapPost("/funcionarios/cadastrar", ([FromBody] Funcionario[] funcionarios, [FromServices] AppDbContext ctx) => 
+{   
+    foreach (Funcionario funcionario in funcionarios)
+    {
+        ctx.Funcionarios.Add(funcionario);
+    }
+    
+    ctx.SaveChanges();
+    return Results.Created("",funcionarios);
+});
+//listando funcionario
+app.MapGet("/funcionarios/listar",([FromServices] AppDbContext ctx) =>
+{
+    if (ctx.Funcionarios.Any())
+    {
+        return Results.Ok(ctx.Funcionarios.ToList());
+    }
+    return Results.NotFound("Tabela vazia!");
+});
+//alterar funcionario
+app.MapPut("/funcionarios/alterar/{usuario}",([FromRoute] string usuario, [FromBody] Funcionario funcionarioAlterado, [FromServices] AppDbContext ctx) =>
+{
+    Funcionario? funcionario = ctx.Funcionarios.FirstOrDefault(c => c.Usuario == usuario);
+    if (funcionario is null)
+    {
+        return Results.NotFound("Funcionario não encontrado!");
+    }
+
+    funcionario.Nome = funcionarioAlterado.Nome;
+    funcionario.Usuario = funcionarioAlterado.Usuario;
+    funcionario.Senha = funcionarioAlterado.Senha;
+
+    ctx.Funcionarios.Update(funcionario);
+    ctx.SaveChanges();
+    return Results.Ok("Funcionario alterado com sucesso!");
+});
+//deletar funcionario
+app.MapDelete("/funcionarios/deletar/{usuario}",([FromRoute] string usuario, [FromServices] AppDbContext ctx) =>
+{
+    Funcionario? funcionario = ctx.Funcionarios.FirstOrDefault(c => c.Usuario == usuario);
+    if (funcionario is null)
+    {
+        return Results.NotFound("Funcionario não encontrado!");
+    }
+    ctx.Funcionarios.Remove(funcionario);
+    ctx.SaveChanges();
+    return Results.Ok("Funcionario deletado com sucesso!");
+});
 
 app.Run();

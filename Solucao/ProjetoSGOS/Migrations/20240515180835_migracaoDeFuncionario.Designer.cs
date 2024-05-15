@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjetoSGOS.Models;
 
@@ -10,9 +11,11 @@ using ProjetoSGOS.Models;
 namespace ProjetoSGOS.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240515180835_migracaoDeFuncionario")]
+    partial class migracaoDeFuncionario
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.4");
@@ -94,7 +97,7 @@ namespace ProjetoSGOS.Migrations
 
             modelBuilder.Entity("ProjetoSGOS.Models.Funcionario", b =>
                 {
-                    b.Property<string>("FuncionarioId")
+                    b.Property<string>("Usuario")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Nome")
@@ -103,10 +106,7 @@ namespace ProjetoSGOS.Migrations
                     b.Property<string>("Senha")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Usuario")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("FuncionarioId");
+                    b.HasKey("Usuario");
 
                     b.ToTable("Funcionarios");
                 });

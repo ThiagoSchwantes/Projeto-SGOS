@@ -178,3 +178,38 @@ Content-Type: application/json
 
 ### deletar pagamento
 DELETE {{base_url}}/pagamentos/deletar/a93dadf6-adf7-4cd3-8ca5-fea07baab617
+
+# FUNCIONARIO ######################################
+###criar funcionario
+POST {{base_url}}/funcionarios/cadastrar
+Content-Type: application/json
+
+[
+    {
+        "nome" : "Carlos Drummond de Andrade",
+        "usuario" : "carlos",
+        "senha": "poetamaster"
+    },
+    
+    {
+        "nome" : "Manuel Bandeira",
+        "usuario" : "manuel",
+        "senha": "modernismo"
+    }
+]
+
+### listar funcionario
+GET {{base_url}}/funcionarios/listar
+
+### alterar funcionario
+PUT {{base_url}}/funcionarios/alterar/carlos
+Content-Type: application/json
+
+{
+    "nome" : "Joaquim Maria Machado de Assis",
+    "usuario" : "joaquim",
+    "senha": "maioral"
+}
+
+### deletar funcionario
+DELETE {{base_url}}/funcionarios/deletar/manuel
