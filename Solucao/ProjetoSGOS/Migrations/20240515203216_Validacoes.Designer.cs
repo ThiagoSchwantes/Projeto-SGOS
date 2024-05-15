@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjetoSGOS.Models;
 
@@ -10,9 +11,11 @@ using ProjetoSGOS.Models;
 namespace ProjetoSGOS.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240515203216_Validacoes")]
+    partial class Validacoes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.4");
@@ -78,13 +81,7 @@ namespace ProjetoSGOS.Migrations
 
                     b.HasKey("ClienteId");
 
-                    b.HasIndex("CPF")
-                        .IsUnique();
-
-                    b.HasIndex("RG")
-                        .IsUnique();
-
-                    b.HasIndex("RG", "CPF")
+                    b.HasIndex("CPF", "RG")
                         .IsUnique();
 
                     b.ToTable("Clientes");

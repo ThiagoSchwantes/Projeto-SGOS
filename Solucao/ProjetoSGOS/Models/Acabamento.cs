@@ -10,10 +10,8 @@ namespace ProjetoSGOS.Models
         public string? AcabamentoId { get; set; } = Guid.NewGuid().ToString();
         public string? Nome { get; set; }
         public string? Descricao { get; set; }
-        public DateTime CriadoEm { get; set; }
+        public DateTime CriadoEm { get; set; } = DateTime.Today;
 
-        public Acabamento(){
-            CriadoEm = DateTime.Today;
-        }
+        public List<Produto> Produtos { get; } = [];
     }
 }

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjetoSGOS.Models;
 
@@ -10,9 +11,11 @@ using ProjetoSGOS.Models;
 namespace ProjetoSGOS.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240515193631_AdicionadoRelacionamentos")]
+    partial class AdicionadoRelacionamentos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.4");
@@ -42,50 +45,33 @@ namespace ProjetoSGOS.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Bairro")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("CPF")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Cep")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Cidade")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("DataCadastro")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Endereco")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Nome")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("RG")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Telefone")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("ClienteId");
-
-                    b.HasIndex("CPF")
-                        .IsUnique();
-
-                    b.HasIndex("RG")
-                        .IsUnique();
-
-                    b.HasIndex("RG", "CPF")
-                        .IsUnique();
 
                     b.ToTable("Clientes");
                 });
@@ -145,6 +131,8 @@ namespace ProjetoSGOS.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("OrdemServicoId");
+
+                    b.HasIndex("ClienteId");
 
                     b.HasIndex("FuncionarioId");
 
@@ -207,15 +195,15 @@ namespace ProjetoSGOS.Migrations
 
             modelBuilder.Entity("ProjetoSGOS.Models.OrdemServico", b =>
                 {
-                    b.HasOne("ProjetoSGOS.Models.Funcionario", "Funcionario")
+                    b.HasOne("ProjetoSGOS.Models.Cliente", "Cliente")
                         .WithMany("OrdemServicos")
-                        .HasForeignKey("FuncionarioId")
+                        .HasForeignKey("ClienteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ProjetoSGOS.Models.Cliente", "Cliente")
+                    b.HasOne("ProjetoSGOS.Models.Funcionario", "Funcionario")
                         .WithMany("OrdemServicos")
-                        .HasForeignKey("OrdemServicoId")
+                        .HasForeignKey("FuncionarioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

@@ -157,11 +157,11 @@ Content-Type: application/json
 
 [
     {
-        "formaDePagamento": "dinheiro"
+        "forma": "dinheiro"
     },
     
     {
-        "formaDePagamento": "cartão de crédito"
+        "forma": "cartão de crédito"
     }
 ]
 
@@ -173,7 +173,7 @@ PUT {{base_url}}/pagamentos/alterar/224411f7-4f2e-4758-8b34-eb3d5e68668c
 Content-Type: application/json
 
 {
-    "formaDePagamento": "cartão de débito"
+    "forma": "cartão de débito"
 }
 
 ### deletar pagamento

@@ -8,11 +8,10 @@ namespace ProjetoSGOS.Models
     public class Pagamento
     {
         public string? PagamentoId { get; set; } = Guid.NewGuid().ToString();
-        public string? FormaDePagamento { get; set; }
-        public DateTime CriadoEm { get; set; }
+        public string? Forma { get; set; }
+        public double Valor { get; set; } 
 
-        public Pagamento(){
-            CriadoEm = DateTime.Today;
-        }
+        public string OrdemServicoId { get; set; } = null!;
+        public OrdemServico OrdemServico { get; set; } = null!;
     }
 }

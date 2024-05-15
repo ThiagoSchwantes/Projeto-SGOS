@@ -11,10 +11,12 @@ namespace ProjetoSGOS.Models
         public string? Nome { get; set; }
         public string? Descricao { get; set; }
         public double Preco { get; set;}
-        public DateTime CriadoEm { get; set; }
+        public DateTime CriadoEm { get; set; } = DateTime.Today;
+        
+        public string EquipamentoId { get; set; } = null!;
+        public Equipamento Equipamento { get; set; } = null!;
 
-        public Produto(){
-            CriadoEm = DateTime.Today;
-        }
+        public string AcabamentoId { get; set; } = null!;
+        public Acabamento Acabamento { get; set; } = null!;
     }
 }
