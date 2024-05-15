@@ -50,5 +50,38 @@ Content-Type: application/json
 ### deletar cliente
 DELETE {{base_url}}/clientes/deletar/12345678910
 
-### Obtenção de uma folha
-GET {{base_url}}/folha/buscar/12345678912/10/2023
+# PRODUTO ######################################
+###criar produto
+POST {{base_url}}/produto/cadastrar
+Content-Type: application/json
+
+[
+    {
+        "nome": "lona",
+        "descricao" : "lona 440g branco front-light com fundo black",
+        "preco" : 35.00
+    },
+    
+    {
+        "nome": "adesivo",
+        "descricao" : "adesivo 12mm black-out",
+        "preco" : 30.00
+    }
+]
+
+### listar cliente
+GET {{base_url}}/produto/listar
+
+### alterar cliente
+PUT {{base_url}}/produto/alterar/a8dbd926-bb9f-4946-a73f-3465f2496da3
+Content-Type: application/json
+
+{
+    "nome": "adesivo transparente",
+    "descricao" : "adesivo transparente 10mm brilho,marca viniLona",
+    "preco" : 45.00
+    
+}
+
+### deletar cliente
+DELETE {{base_url}}/produto/deletar/a8dbd926-bb9f-4946-a73f-3465f2496da3

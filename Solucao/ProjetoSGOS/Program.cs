@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>();
 builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options => options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 var app = builder.Build();
-
+//--------------------------------------------------------------------------------------------------------------
 //cadastrando clientes
 app.MapPost("/clientes/cadastrar", ([FromBody] Cliente[] clientes, [FromServices] AppDbContext ctx) => 
 {   
@@ -61,7 +61,7 @@ app.MapDelete("/clientes/deletar/{cpf}",([FromRoute] string cpf, [FromServices] 
     ctx.SaveChanges();
     return Results.Ok("Cliente deletado com sucesso!");
 });
-
+//---------------------------------------------------------------------------------------------------------
 //cadastrando Produto
 app.MapPost("/produto/cadastrar", ([FromBody] Produto[] produtos, [FromServices] AppDbContext ctx) => 
 {   
@@ -74,48 +74,44 @@ app.MapPost("/produto/cadastrar", ([FromBody] Produto[] produtos, [FromServices]
     return Results.Created("",produtos);
 });
 //listando clientes
-app.MapGet("/clientes/listar",([FromServices] AppDbContext ctx) =>
+app.MapGet("/produto/listar",([FromServices] AppDbContext ctx) =>
 {
-    if (ctx.Clientes.Any())
+    if (ctx.Produtos.Any())
     {
-        return Results.Ok(ctx.Clientes.ToList());
+        return Results.Ok(ctx.Produtos.ToList());
     }
     return Results.NotFound("Tabela vazia!");
 });
 //alterar clientes
-app.MapPut("/clientes/alterar/{cpf}",([FromRoute] string cpf, [FromBody] Cliente clienteAlterado, [FromServices] AppDbContext ctx) =>
+app.MapPut("/produto/alterar/{id}",([FromRoute] string id, [FromBody] Produto produtoAlterado, [FromServices] AppDbContext ctx) =>
 {
-    Cliente? cliente = ctx.Clientes.FirstOrDefault(c => c.CPF == cpf);
-    if (cliente is null){
-        return Results.NotFound("Cliente não encontrado!");
+    Produto? produto = ctx.Produtos.FirstOrDefault(c => c.ProdutoId == id);
+    if (produto is null){
+        return Results.NotFound("Produto não encontrado!");
     }
 
-    cliente.Nome = clienteAlterado.Nome;
-    cliente.CPF = clienteAlterado.CPF;
-    cliente.RG = clienteAlterado.RG;
-    cliente.Cep = clienteAlterado.Cep;
-    cliente.Endereco = clienteAlterado.Endereco;
-    cliente.Bairro = clienteAlterado.Bairro;
-    cliente.Cidade = clienteAlterado.Cidade;
-    cliente.Telefone = clienteAlterado.Telefone;
+    produto.Nome = produtoAlterado.Nome;
+    produto.Descricao = produtoAlterado.Descricao;
+    produto.Preco = produtoAlterado.Preco;
+    
 
-    ctx.Clientes.Update(cliente);
+    ctx.Produtos.Update(produto);
     ctx.SaveChanges();
-    return Results.Ok("Cliente alterado com sucesso!");
+    return Results.Ok("Produto alterado com sucesso!");
 });
 //deletar cliente
-app.MapDelete("/clientes/deletar/{cpf}",([FromRoute] string cpf, [FromServices] AppDbContext ctx) =>
+app.MapDelete("/produto/deletar/{id}",([FromRoute] string id, [FromServices] AppDbContext ctx) =>
 {
-    Cliente? cliente = ctx.Clientes.FirstOrDefault(c => c.CPF == cpf);
-    if (cliente is null)
+    Produto? produto = ctx.Produtos.FirstOrDefault(c => c.ProdutoId == id);
+    if (produto is null)
     {
         return Results.NotFound("Produto não encontrado!");
     }
-    ctx.Clientes.Remove(cliente);
+    ctx.Produtos.Remove(produto);
     ctx.SaveChanges();
-    return Results.Ok("Cliente deletado com sucesso!");
+    return Results.Ok("Produto deletado com sucesso!");
 });
-
+//-------------------------------------------------------------------------------------------------------
 
 
 app.Run();
