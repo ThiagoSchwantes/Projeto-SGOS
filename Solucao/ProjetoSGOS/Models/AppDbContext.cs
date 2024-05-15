@@ -14,6 +14,7 @@ namespace ProjetoSGOS.Models
         public DbSet<Equipamento> Equipamentos { get; set; }
         public DbSet<Pagamento> Pagamentos { get; set; }
         public DbSet<Funcionario> Funcionarios { get; set;}
+        public DbSet<OrdemServico> OrdemServicos { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

@@ -9,10 +9,12 @@ namespace ProjetoSGOS.Models
     {
         public String? OrdemServicoId { get; set; } = Guid.NewGuid().ToString();
         public DateTime DataAbertura { get; set; }
-    }
 
-    public OrdemServico()
-    {
-        DataAbertura = DateTime.Today;
+        public 
+
+        public OrdemServico()
+        {
+            DataAbertura = DateTime.Today;
+        }
     }
 }
