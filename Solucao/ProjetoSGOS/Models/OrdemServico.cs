@@ -3,18 +3,47 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+
+
 namespace ProjetoSGOS.Models
 {
     public class OrdemServico
     {
-        public string OrdemServicoId { get; set; } = Guid.NewGuid().ToString();
-        public DateTime DataAbertura { get; set; } = DateTime.Today;
+        public int OrdemServicoId { get; set; }
 
-        public string ClienteId { get; set; } = null!;
+        public double ValorTotal { get; set; } = 0;
+        public double ValorDesconto { get; set; } = 0;
+        public double ValorAPagar { get; set; } = 0;
+
+        public string? Observacoes { get; set; }
+    
+        public DateTime DataHorarioAbertura { get; set; } = DateTime.Today;
+        public Status Status { get; set; } = Status.EmProducao;
+
+        public int ClienteId { get; set; }
         public Cliente Cliente { get; set; } = null!;
 
-        public Funcionario Funcionario { get; set; } = null!;
-        public string FuncionarioId { get; set; } = null!;
-        public List<Pagamento> Pagamentos { get; } = [];
+        public int VendedorId { get; set; }
+        public Vendedor Vendedor { get; set; } = null!;
+
+        public ICollection<Produto> Produtos { get; } = [];
+
+        public ICollection<Pagamento> Pagamentos { get; } = [];
+
+        public OrdemServico(){
+            foreach (Produto produto in Produtos)
+            {
+                ValorTotal += produto.ValorSubTotal;
+            }
+
+            ValorAPagar = ValorTotal - ValorDesconto;
+        }
+    }
+    public enum Status {
+        EmProducao = 0,
+        EmAcabamento = 1,
+        Finalizada = 2,
+        SolicitadoBaixa = 3,
+        Baixada = 4
     }
 }

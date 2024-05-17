@@ -7,12 +7,13 @@ namespace ProjetoSGOS.Models
 {
     public class Equipamento
     {
-        public string? EquipamentoId { get; set; } = Guid.NewGuid().ToString();
-        public string? Nome { get; set; }
-        public string? Descricao { get; set; }
+        public int EquipamentoId { get; set; }
         public DateTime CriadoEm { get; set; } = DateTime.Today;
 
-        public List<Produto> Produtos { get; } = [];
+        public string Nome { get; set; } = null!;
+        public string? Descricao { get; set; }
+
+        public ICollection<Produto> Produtos { get; } = [];
 
     }
 }

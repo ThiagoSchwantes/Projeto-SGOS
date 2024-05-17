@@ -29,9 +29,6 @@ app.MapPost("/clientes/cadastrar", ([FromBody] Cliente[] clientes, [FromServices
         ctx.Clientes.Add(cliente);
         i++;
     }
-
-    
-    
     ctx.SaveChanges();
     return Results.Created("",clientes);
 });
@@ -81,58 +78,58 @@ app.MapDelete("/clientes/deletar/{cpf}",([FromRoute] string cpf, [FromServices] 
     return Results.Ok("Cliente deletado com sucesso!");
 });
 
-//---------------------------------------------------------------------------------------------------------
-//cadastrando Produto
-app.MapPost("/produtos/cadastrar", ([FromBody] Produto[] produtos, [FromServices] AppDbContext ctx) => 
+//-------------------------------------------------------------------------------------------------------
+//cadastrando vendedor
+app.MapPost("/vendedores/cadastrar", ([FromBody] Vendedor[] vendedors, [FromServices] AppDbContext ctx) => 
 {   
-    foreach (Produto produto in produtos)
+    foreach (Vendedor vendedor in vendedors)
     {
-        ctx.Produtos.Add(produto);
+        ctx.Vendedores.Add(vendedor);
     }
     
     ctx.SaveChanges();
-    return Results.Created("",produtos);
+    return Results.Created("",vendedors);
 });
 
-//listando Produto
-app.MapGet("/produtos/listar",([FromServices] AppDbContext ctx) =>
+//listando vendedor
+app.MapGet("/vendedores/listar",([FromServices] AppDbContext ctx) =>
 {
-    if (ctx.Produtos.Any())
+    if (ctx.Vendedores.Any())
     {
-        return Results.Ok(ctx.Produtos.ToList());
+        return Results.Ok(ctx.Vendedores.ToList());
     }
     return Results.NotFound("Tabela vazia!");
 });
 
-//alterar Produto
-app.MapPut("/produtos/alterar/{id}",([FromRoute] string id, [FromBody] Produto produtoAlterado, [FromServices] AppDbContext ctx) =>
+//alterar vendedor
+app.MapPut("/vendedores/alterar/{usuario}",([FromRoute] string usuario, [FromBody] Vendedor vendedorAlterado, [FromServices] AppDbContext ctx) =>
 {
-    Produto? produto = ctx.Produtos.FirstOrDefault(c => c.ProdutoId == id);
-    if (produto is null){
-        return Results.NotFound("Produto não encontrado!");
+    Vendedor? vendedor = ctx.Vendedores.FirstOrDefault(c => c.Usuario == usuario);
+    if (vendedor is null)
+    {
+        return Results.NotFound("vendedor não encontrado!");
     }
 
-    produto.Nome = produtoAlterado.Nome;
-    produto.Descricao = produtoAlterado.Descricao;
-    produto.Preco = produtoAlterado.Preco;
-    
+    vendedor.Nome = vendedorAlterado.Nome;
+    vendedor.Usuario = vendedorAlterado.Usuario;
+    vendedor.Senha = vendedorAlterado.Senha;
 
-    ctx.Produtos.Update(produto);
+    ctx.Vendedores.Update(vendedor);
     ctx.SaveChanges();
-    return Results.Ok("Produto alterado com sucesso!");
+    return Results.Ok("vendedor alterado com sucesso!");
 });
 
-//deletar Produto
-app.MapDelete("/produtos/deletar/{id}",([FromRoute] string id, [FromServices] AppDbContext ctx) =>
+//deletar vendedor
+app.MapDelete("/vendedores/deletar/{usuario}",([FromRoute] string usuario, [FromServices] AppDbContext ctx) =>
 {
-    Produto? produto = ctx.Produtos.FirstOrDefault(c => c.ProdutoId == id);
-    if (produto is null)
+    Vendedor? Vendedor = ctx.Vendedores.FirstOrDefault(c => c.Usuario == usuario);
+    if (Vendedor is null)
     {
-        return Results.NotFound("Produto não encontrado!");
+        return Results.NotFound("vendedor não encontrado!");
     }
-    ctx.Produtos.Remove(produto);
+    ctx.Vendedores.Remove(Vendedor);
     ctx.SaveChanges();
-    return Results.Ok("Produto deletado com sucesso!");
+    return Results.Ok("vendedor deletado com sucesso!");
 });
 
 //-------------------------------------------------------------------------------------------------------
@@ -159,7 +156,7 @@ app.MapGet("/acabamentos/listar",([FromServices] AppDbContext ctx) =>
 });
 
 //alterar acabamento
-app.MapPut("/acabamentos/alterar/{id}",([FromRoute] string id, [FromBody] Acabamento acabamentoAlterado, [FromServices] AppDbContext ctx) =>
+app.MapPut("/acabamentos/alterar/{id}",([FromRoute] int id, [FromBody] Acabamento acabamentoAlterado, [FromServices] AppDbContext ctx) =>
 {
     Acabamento? acabamento = ctx.Acabamentos.FirstOrDefault(c => c.AcabamentoId == id);
     if (acabamento is null){
@@ -175,7 +172,7 @@ app.MapPut("/acabamentos/alterar/{id}",([FromRoute] string id, [FromBody] Acabam
 });
 
 //deletar acabamento
-app.MapDelete("/acabamentos/deletar/{id}",([FromRoute] string id, [FromServices] AppDbContext ctx) =>
+app.MapDelete("/acabamentos/deletar/{id}",([FromRoute] int id, [FromServices] AppDbContext ctx) =>
 {
     Acabamento? acabamento = ctx.Acabamentos.FirstOrDefault(c => c.AcabamentoId == id);    
     if (acabamento is null)
@@ -211,7 +208,7 @@ app.MapGet("/equipamentos/listar",([FromServices] AppDbContext ctx) =>
 });
 
 //alterar equipamento
-app.MapPut("/equipamentos/alterar/{id}",([FromRoute] string id, [FromBody] Equipamento equipamentoAlterado, [FromServices] AppDbContext ctx) =>
+app.MapPut("/equipamentos/alterar/{id}",([FromRoute] int id, [FromBody] Equipamento equipamentoAlterado, [FromServices] AppDbContext ctx) =>
 {
     Equipamento? equipamento = ctx.Equipamentos.FirstOrDefault(c => c.EquipamentoId == id);
     if (equipamento is null){
@@ -227,7 +224,7 @@ app.MapPut("/equipamentos/alterar/{id}",([FromRoute] string id, [FromBody] Equip
 });
 
 //deletar equipamento
-app.MapDelete("/equipamentos/deletar/{id}",([FromRoute] string id, [FromServices] AppDbContext ctx) =>
+app.MapDelete("/equipamentos/deletar/{id}",([FromRoute] int id, [FromServices] AppDbContext ctx) =>
 {
     Equipamento? equipamento = ctx.Equipamentos.FirstOrDefault(c => c.EquipamentoId == id);
     if (equipamento is null)
@@ -237,6 +234,120 @@ app.MapDelete("/equipamentos/deletar/{id}",([FromRoute] string id, [FromServices
     ctx.Equipamentos.Remove(equipamento);
     ctx.SaveChanges();
     return Results.Ok("Equipamento deletado com sucesso!");
+});
+
+
+//---------------------------------------------------------------------------------------------------------
+//cadastrando Ordem de Serviço
+app.MapPost("/ordem-servico/cadastrar", ([FromBody] OrdemServico[] ordemServicos, [FromServices] AppDbContext ctx) => 
+{   
+
+    foreach (OrdemServico ordemServico in ordemServicos)
+    {
+        ctx.OrdemServicos.Add(ordemServico);
+    }
+    
+    ctx.SaveChanges();
+    return Results.Created("",ordemServicos);
+});
+
+//listando Ordem de Serviço
+app.MapGet("/ordem-servico/listar",([FromServices] AppDbContext ctx) =>
+{
+    if (ctx.OrdemServicos.Any())
+    {
+        return Results.Ok(ctx.OrdemServicos.ToList());
+    }
+    return Results.NotFound("Tabela vazia!");
+});
+
+//alterar  Ordem de Serviço
+app.MapPut("/ordem-servico/alterar/{id}",([FromRoute] int id, [FromBody] OrdemServico ordemServicoAlterada, [FromServices] AppDbContext ctx) =>
+{
+    OrdemServico? ordemServico = ctx.OrdemServicos.FirstOrDefault(c => c.OrdemServicoId == id);
+    if (ordemServico is null){
+        return Results.NotFound("Ordem de Serviço não encontrada!");
+    }
+
+    ordemServico.Status = ordemServicoAlterada.Status;
+    ordemServico.Observacoes = ordemServicoAlterada.Observacoes;
+    ordemServico.ClienteId = ordemServicoAlterada.ClienteId;
+    ordemServico.VendedorId = ordemServicoAlterada.VendedorId;
+    
+
+    ctx.OrdemServicos.Update(ordemServico);
+    ctx.SaveChanges();
+    return Results.Ok("Ordem de Serviço alterada com sucesso!");
+});
+
+//deletar Ordem de Serviço
+app.MapDelete("/ordem-servico/deletar/{id}",([FromRoute] int id, [FromServices] AppDbContext ctx) =>
+{
+    OrdemServico? ordemServico = ctx.OrdemServicos.FirstOrDefault(c => c.OrdemServicoId == id);
+    if (ordemServico is null)
+    {
+        return Results.NotFound("Ordem de Serviço não encontrada!");
+    }
+
+    ctx.OrdemServicos.Remove(ordemServico);
+    ctx.SaveChanges();
+    return Results.Ok("Ordem de Serviço deletada com sucesso!");
+});
+
+
+//---------------------------------------------------------------------------------------------------------
+//cadastrando Produto
+app.MapPost("/produtos/cadastrar", ([FromBody] Produto[] produtos, [FromServices] AppDbContext ctx) => 
+{   
+    
+
+    foreach (Produto produto in produtos)
+    {
+        ctx.Produtos.Add(produto);
+    }
+    
+    ctx.SaveChanges();
+    return Results.Created("",produtos);
+});
+
+//listando Produto
+app.MapGet("/produtos/listar",([FromServices] AppDbContext ctx) =>
+{
+    if (ctx.Produtos.Any())
+    {
+        return Results.Ok(ctx.Produtos.ToList());
+    }
+    return Results.NotFound("Tabela vazia!");
+});
+
+//alterar Produto
+app.MapPut("/produtos/alterar/{id}",([FromRoute] int id, [FromBody] Produto produtoAlterado, [FromServices] AppDbContext ctx) =>
+{
+    Produto? produto = ctx.Produtos.FirstOrDefault(c => c.ProdutoId == id);
+    if (produto is null){
+        return Results.NotFound("Produto não encontrado!");
+    }
+
+    produto.Nome = produtoAlterado.Nome;
+    produto.Descricao = produtoAlterado.Descricao;
+    
+
+    ctx.Produtos.Update(produto);
+    ctx.SaveChanges();
+    return Results.Ok("Produto alterado com sucesso!");
+});
+
+//deletar Produto
+app.MapDelete("/produtos/deletar/{id}",([FromRoute] int id, [FromServices] AppDbContext ctx) =>
+{
+    Produto? produto = ctx.Produtos.FirstOrDefault(c => c.ProdutoId == id);
+    if (produto is null)
+    {
+        return Results.NotFound("Produto não encontrado!");
+    }
+    ctx.Produtos.Remove(produto);
+    ctx.SaveChanges();
+    return Results.Ok("Produto deletado com sucesso!");
 });
 
 //-------------------------------------------------------------------------------------------------------
@@ -263,7 +374,7 @@ app.MapGet("/pagamentos/listar",([FromServices] AppDbContext ctx) =>
 });
 
 //alterar pagamento
-app.MapPut("/pagamentos/alterar/{id}",([FromRoute] string id, [FromBody] Pagamento pagamentoAlterado, [FromServices] AppDbContext ctx) =>
+app.MapPut("/pagamentos/alterar/{id}",([FromRoute] int id, [FromBody] Pagamento pagamentoAlterado, [FromServices] AppDbContext ctx) =>
 {
     Pagamento? pagamento = ctx.Pagamentos.FirstOrDefault(c => c.PagamentoId == id);
     if (pagamento is null){
@@ -278,7 +389,7 @@ app.MapPut("/pagamentos/alterar/{id}",([FromRoute] string id, [FromBody] Pagamen
 });
 
 //deletar pagamento
-app.MapDelete("/pagamentos/deletar/{id}",([FromRoute] string id, [FromServices] AppDbContext ctx) =>
+app.MapDelete("/pagamentos/deletar/{id}",([FromRoute] int id, [FromServices] AppDbContext ctx) =>
 {
     Pagamento? pagamento = ctx.Pagamentos.FirstOrDefault(c => c.PagamentoId == id);
     if (pagamento is null)
@@ -290,58 +401,6 @@ app.MapDelete("/pagamentos/deletar/{id}",([FromRoute] string id, [FromServices] 
     return Results.Ok("Pagamento deletado com sucesso!");
 });
 
-//-------------------------------------------------------------------------------------------------------
-//cadastrando funcionario
-app.MapPost("/funcionarios/cadastrar", ([FromBody] Funcionario[] funcionarios, [FromServices] AppDbContext ctx) => 
-{   
-    foreach (Funcionario funcionario in funcionarios)
-    {
-        ctx.Funcionarios.Add(funcionario);
-    }
-    
-    ctx.SaveChanges();
-    return Results.Created("",funcionarios);
-});
 
-//listando funcionario
-app.MapGet("/funcionarios/listar",([FromServices] AppDbContext ctx) =>
-{
-    if (ctx.Funcionarios.Any())
-    {
-        return Results.Ok(ctx.Funcionarios.ToList());
-    }
-    return Results.NotFound("Tabela vazia!");
-});
-
-//alterar funcionario
-app.MapPut("/funcionarios/alterar/{usuario}",([FromRoute] string usuario, [FromBody] Funcionario funcionarioAlterado, [FromServices] AppDbContext ctx) =>
-{
-    Funcionario? funcionario = ctx.Funcionarios.FirstOrDefault(c => c.Usuario == usuario);
-    if (funcionario is null)
-    {
-        return Results.NotFound("Funcionario não encontrado!");
-    }
-
-    funcionario.Nome = funcionarioAlterado.Nome;
-    funcionario.Usuario = funcionarioAlterado.Usuario;
-    funcionario.Senha = funcionarioAlterado.Senha;
-
-    ctx.Funcionarios.Update(funcionario);
-    ctx.SaveChanges();
-    return Results.Ok("Funcionario alterado com sucesso!");
-});
-
-//deletar funcionario
-app.MapDelete("/funcionarios/deletar/{usuario}",([FromRoute] string usuario, [FromServices] AppDbContext ctx) =>
-{
-    Funcionario? funcionario = ctx.Funcionarios.FirstOrDefault(c => c.Usuario == usuario);
-    if (funcionario is null)
-    {
-        return Results.NotFound("Funcionario não encontrado!");
-    }
-    ctx.Funcionarios.Remove(funcionario);
-    ctx.SaveChanges();
-    return Results.Ok("Funcionario deletado com sucesso!");
-});
 
 app.Run();

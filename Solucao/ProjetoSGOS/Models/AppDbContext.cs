@@ -14,7 +14,7 @@ namespace ProjetoSGOS.Models
         public DbSet<Acabamento> Acabamentos { get; set; }
         public DbSet<Equipamento> Equipamentos { get; set; }
         public DbSet<Pagamento> Pagamentos { get; set; }
-        public DbSet<Funcionario> Funcionarios { get; set;}
+        public DbSet<Vendedor> Vendedores { get; set;}
         public DbSet<OrdemServico> OrdemServicos { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -35,15 +35,21 @@ namespace ProjetoSGOS.Models
                 .IsRequired();
 
             modelBuilder.Entity<OrdemServico>()
-                .HasOne(os => os.Funcionario)
+                .HasOne(os => os.Vendedor)
                 .WithMany(c => c.OrdemServicos)
-                .HasForeignKey(os => os.FuncionarioId)
+                .HasForeignKey(os => os.VendedorId)
                 .IsRequired();
             
             modelBuilder.Entity<OrdemServico>()
                 .HasMany(os => os.Pagamentos)
                 .WithOne(c => c.OrdemServico)
                 .HasForeignKey(os => os.PagamentoId)
+                .IsRequired();
+
+            modelBuilder.Entity<OrdemServico>()
+                .HasMany(os => os.Produtos)
+                .WithOne(p => p.OrdemServico)
+                .HasForeignKey(p => p.OrdemServicoId)
                 .IsRequired();
 
             modelBuilder.Entity<Produto>()

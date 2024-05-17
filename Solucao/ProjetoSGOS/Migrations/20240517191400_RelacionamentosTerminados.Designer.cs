@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjetoSGOS.Models;
 
@@ -10,9 +11,11 @@ using ProjetoSGOS.Models;
 namespace ProjetoSGOS.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240517191400_RelacionamentosTerminados")]
+    partial class RelacionamentosTerminados
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.4");
@@ -30,7 +33,6 @@ namespace ProjetoSGOS.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Nome")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("AcabamentoId");
@@ -106,7 +108,6 @@ namespace ProjetoSGOS.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Nome")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("EquipamentoId");
@@ -155,8 +156,8 @@ namespace ProjetoSGOS.Migrations
                     b.Property<int>("PagamentoId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Forma")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Forma")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("OrdemServicoId")
                         .HasColumnType("INTEGER");
@@ -194,7 +195,6 @@ namespace ProjetoSGOS.Migrations
                         .HasColumnType("REAL");
 
                     b.Property<string>("Nome")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("OrdemServicoId")
@@ -230,15 +230,12 @@ namespace ProjetoSGOS.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Nome")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Senha")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Usuario")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("VendedorId");

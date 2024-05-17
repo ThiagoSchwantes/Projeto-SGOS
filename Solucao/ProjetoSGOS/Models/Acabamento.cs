@@ -7,11 +7,12 @@ namespace ProjetoSGOS.Models
 {
     public class Acabamento
     {
-        public string? AcabamentoId { get; set; } = Guid.NewGuid().ToString();
-        public string? Nome { get; set; }
-        public string? Descricao { get; set; }
+        public int AcabamentoId { get; set; }
         public DateTime CriadoEm { get; set; } = DateTime.Today;
 
-        public List<Produto> Produtos { get; } = [];
+        public string Nome { get; set; } = null!;
+        public string? Descricao { get; set; }
+
+        public ICollection<Produto> Produtos { get; } = [];
     }
 }

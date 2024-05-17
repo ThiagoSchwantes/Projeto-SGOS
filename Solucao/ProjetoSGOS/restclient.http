@@ -32,7 +32,7 @@ Content-Type: application/json
 ### listar cliente
 GET {{base_url}}/clientes/listar
 
-### alterar cliente
+### alterar cliente pelo cpf
 PUT {{base_url}}/clientes/alterar/12345678910
 Content-Type: application/json
 
@@ -48,43 +48,42 @@ Content-Type: application/json
 }
 
 ### deletar cliente
-DELETE {{base_url}}/clientes/deletar/12345678910
+DELETE {{base_url}}/clientes/deletar/83374465510
 
-# PRODUTO ######################################
-###criar produto
-POST {{base_url}}/produto/cadastrar
+# VENDEDOR ######################################
+###criar vendedor
+POST {{base_url}}/vendedores/cadastrar
 Content-Type: application/json
 
 [
     {
-        "nome": "lona",
-        "descricao" : "lona 440g branco front-light com fundo black",
-        "preco" : 35.00
+        "nome" : "Carlos Drummond de Andrade",
+        "usuario" : "carlos",
+        "senha": "poetamaster"
     },
     
     {
-        "nome": "adesivo",
-        "descricao" : "adesivo 12mm black-out",
-        "preco" : 30.00
+        "nome" : "Manuel Bandeira",
+        "usuario" : "manuel",
+        "senha": "modernismo"
     }
 ]
 
-### listar produto
-GET {{base_url}}/produto/listar
+### listar vendedor
+GET {{base_url}}/vendedores/listar
 
-### alterar produto
-PUT {{base_url}}/produto/alterar/a8dbd926-bb9f-4946-a73f-3465f2496da3
+### alterar vendedor pelo usuario
+PUT {{base_url}}/vendedores/alterar/carlos
 Content-Type: application/json
 
 {
-    "nome": "adesivo transparente",
-    "descricao" : "adesivo transparente 10mm brilho,marca viniLona",
-    "preco" : 45.00
-    
+    "nome" : "Joaquim Maria Machado de Assis",
+    "usuario" : "joaquim",
+    "senha": "maioral"
 }
 
-### deletar produto
-DELETE {{base_url}}/produto/deletar/a8dbd926-bb9f-4946-a73f-3465f2496da3
+### deletar vendedor pelo usuario
+DELETE {{base_url}}/vendedores/deletar/carlos
 
 # ACABAMENTO ######################################
 ###criar acabamento
@@ -107,7 +106,7 @@ Content-Type: application/json
 GET {{base_url}}/acabamentos/listar
 
 ### alterar acabamento
-PUT {{base_url}}/acabamentos/alterar/ce75079c-b84f-4a64-80c8-6101a0b5afa2
+PUT {{base_url}}/acabamentos/alterar/1
 Content-Type: application/json
 
 {
@@ -116,7 +115,7 @@ Content-Type: application/json
 }
 
 ### deletar acabamento
-DELETE {{base_url}}/acabamentos/deletar/ce75079c-b84f-4a64-80c8-6101a0b5afa2
+DELETE {{base_url}}/acabamentos/deletar/2
 
 # EQUIPAMENTO ######################################
 ###criar equipamento
@@ -139,7 +138,7 @@ Content-Type: application/json
 GET {{base_url}}/equipamentos/listar
 
 ### alterar equipamento
-PUT {{base_url}}/equipamentos/alterar/dfabb9d2-ce78-4a1f-834b-b1aa51df04aa
+PUT {{base_url}}/equipamentos/alterar/1
 Content-Type: application/json
 
 {
@@ -148,8 +147,93 @@ Content-Type: application/json
 }
 
 ### deletar equipamento
-DELETE {{base_url}}/equipamentos/deletar/dfabb9d2-ce78-4a1f-834b-b1aa51df04aa
+DELETE {{base_url}}/equipamentos/deletar/2
 
+# ORDEM DE SERVIÇO ######################################
+###criar OS
+POST {{base_url}}/ordem-servico/cadastrar
+Content-Type: application/json
+
+[
+    {
+        "observacoes": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec hendrerit elementum nulla vel tincidunt. Cras sit amet neque et nulla.",
+        "clienteId": 3,
+        "vendedorId": 5
+    },
+    
+    {
+        "observacoes": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec hendrerit elementum nulla vel tincidunt. Cras sit amet neque et nulla.",
+        "clienteId": 4,
+        "vendedorId": 6
+    }
+]
+
+### listar OS
+GET {{base_url}}/ordem-servico/listar
+
+### alterar OS
+PUT {{base_url}}/ordem-servico/alterar/
+Content-Type: application/json
+
+{
+    "ordemServicoId" : 1,
+    "observacoes": "observacao alterada",
+    "status": 1,
+    "clienteId": 1,
+    "vendedorId": 1
+}
+
+### deletar OS
+DELETE {{base_url}}/ordem-servico/deletar/1
+
+
+# PRODUTO ######################################
+###criar produto
+POST {{base_url}}/produtos/cadastrar
+Content-Type: application/json
+
+[
+    {
+        "nome": "lona",
+        "descricao" : "lona 440g branco front-light com fundo black",
+        "largura": 2.5,
+        "altura": 2.5,
+        "valorM2": 35,
+        "quantidade": 10,
+        "equipamentoId": 1,
+        "acabamentoId": 1,
+        "ordemServicoId": 1
+    },
+    
+    {
+        "nome": "adesivo",
+        "descricao" : "adesivo 12mm black-out",
+        "largura": 3,
+        "altura": 1,
+        "valorM2": 23,
+        "quantidade": 4,
+        "equipamentoId": 1,
+        "acabamentoId": 1,
+        "ordemServicoId": 2
+    }
+]
+
+### listar produto
+GET {{base_url}}/produtos/listar
+
+### alterar produto
+PUT {{base_url}}/produtos/alterar/
+Content-Type: application/json
+
+{
+    "nome": "adesivo transparente",
+    "descricao" : "adesivo transparente 10mm brilho,marca viniLona",
+    "preco" : 45.00
+    
+}
+
+### deletar produto
+DELETE {{base_url}}/produtos/deletar/
 # PAGAMENTO ######################################
 ###criar pagamento
 POST {{base_url}}/pagamentos/cadastrar
@@ -157,11 +241,15 @@ Content-Type: application/json
 
 [
     {
-        "forma": "dinheiro"
+        "forma": 0,
+        "valor": 1000,
+        "ordemServicoId": 1
     },
     
     {
-        "forma": "cartão de crédito"
+        "forma": 1,
+        "valor": 1187.5,
+        "ordemServicoId": 1
     }
 ]
 
@@ -172,44 +260,13 @@ GET {{base_url}}/pagamentos/listar
 PUT {{base_url}}/pagamentos/alterar/224411f7-4f2e-4758-8b34-eb3d5e68668c
 Content-Type: application/json
 
-{
-    "forma": "cartão de débito"
-}
-
-### deletar pagamento
-DELETE {{base_url}}/pagamentos/deletar/a93dadf6-adf7-4cd3-8ca5-fea07baab617
-
-# FUNCIONARIO ######################################
-###criar funcionario
-POST {{base_url}}/funcionarios/cadastrar
-Content-Type: application/json
-
-[
+[    
     {
-        "nome" : "Carlos Drummond de Andrade",
-        "usuario" : "carlos",
-        "senha": "poetamaster"
-    },
-    
-    {
-        "nome" : "Manuel Bandeira",
-        "usuario" : "manuel",
-        "senha": "modernismo"
+        "forma": 2,
+        "valor": 2187.5,
+        "ordemServicoId": 1
     }
 ]
 
-### listar funcionario
-GET {{base_url}}/funcionarios/listar
-
-### alterar funcionario
-PUT {{base_url}}/funcionarios/alterar/carlos
-Content-Type: application/json
-
-{
-    "nome" : "Joaquim Maria Machado de Assis",
-    "usuario" : "joaquim",
-    "senha": "maioral"
-}
-
-### deletar funcionario
-DELETE {{base_url}}/funcionarios/deletar/manuel
+### deletar pagamento
+DELETE {{base_url}}/pagamentos/deletar/1
