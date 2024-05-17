@@ -26,18 +26,9 @@ namespace ProjetoSGOS.Models
         public int VendedorId { get; set; }
         public Vendedor Vendedor { get; set; } = null!;
 
-        public ICollection<Produto> Produtos { get; } = [];
+        public ICollection<Produto>? Produtos { get; }
 
-        public ICollection<Pagamento> Pagamentos { get; } = [];
-
-        public OrdemServico(){
-            foreach (Produto produto in Produtos)
-            {
-                ValorTotal += produto.ValorSubTotal;
-            }
-
-            ValorAPagar = ValorTotal - ValorDesconto;
-        }
+        public ICollection<Pagamento>? Pagamentos { get; }
     }
     public enum Status {
         EmProducao = 0,

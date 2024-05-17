@@ -157,34 +157,33 @@ Content-Type: application/json
 [
     {
         "observacoes": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec hendrerit elementum nulla vel tincidunt. Cras sit amet neque et nulla.",
-        "clienteId": 3,
-        "vendedorId": 5
+        "clienteId": 1,
+        "vendedorId": 1
     },
     
     {
         "observacoes": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec hendrerit elementum nulla vel tincidunt. Cras sit amet neque et nulla.",
-        "clienteId": 4,
-        "vendedorId": 6
+        "clienteId": 1,
+        "vendedorId": 2
     }
 ]
 
-### listar OS
+### listar O
 GET {{base_url}}/ordem-servico/listar
 
 ### alterar OS
-PUT {{base_url}}/ordem-servico/alterar/
+PUT {{base_url}}/ordem-servico/alterar/1
 Content-Type: application/json
 
 {
-    "ordemServicoId" : 1,
     "observacoes": "observacao alterada",
     "status": 1,
-    "clienteId": 1,
-    "vendedorId": 1
+    "clienteId": 3,
+    "vendedorId": 5
 }
 
 ### deletar OS
-DELETE {{base_url}}/ordem-servico/deletar/1
+DELETE {{base_url}}/ordem-servico/deletar/2
 
 
 # PRODUTO ######################################
@@ -201,7 +200,7 @@ Content-Type: application/json
         "valorM2": 35,
         "quantidade": 10,
         "equipamentoId": 1,
-        "acabamentoId": 1,
+        "acabamentoId": 2,
         "ordemServicoId": 1
     },
     
@@ -212,9 +211,9 @@ Content-Type: application/json
         "altura": 1,
         "valorM2": 23,
         "quantidade": 4,
-        "equipamentoId": 1,
+        "equipamentoId": 2,
         "acabamentoId": 1,
-        "ordemServicoId": 2
+        "ordemServicoId": 1
     }
 ]
 
@@ -233,7 +232,9 @@ Content-Type: application/json
 }
 
 ### deletar produto
-DELETE {{base_url}}/produtos/deletar/
+DELETE {{base_url}}/produtos/deletar/4
+
+
 # PAGAMENTO ######################################
 ###criar pagamento
 POST {{base_url}}/pagamentos/cadastrar

@@ -13,6 +13,6 @@ namespace ProjetoSGOS.Models
         public string Usuario { get; set;} = null!;
         public string Senha { get; set;} = null!;
 
-        public ICollection<OrdemServico> OrdemServicos{ get; } = [];
+        public ICollection<OrdemServico>? OrdemServicos{ get; }
     }
 }

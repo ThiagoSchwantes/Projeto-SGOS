@@ -256,7 +256,18 @@ app.MapGet("/ordem-servico/listar",([FromServices] AppDbContext ctx) =>
 {
     if (ctx.OrdemServicos.Any())
     {
-        return Results.Ok(ctx.OrdemServicos.ToList());
+#pragma warning disable CS8620 // O argumento não pode ser usado para o parâmetro devido a diferenças na nulidade dos tipos de referência.
+        return Results.Ok(
+            ctx.OrdemServicos?
+            .Include(os => os.Produtos)
+            .ThenInclude(p => p.Acabamento)?
+            .Include(os => os.Produtos)
+            .ThenInclude(p => p.Equipamento)
+            .Include(os => os.Vendedor)
+            .Include(os => os.Cliente)
+            .ToList()
+        );
+#pragma warning restore CS8620 // O argumento não pode ser usado para o parâmetro devido a diferenças na nulidade dos tipos de referência.
     }
     return Results.NotFound("Tabela vazia!");
 });
@@ -299,15 +310,28 @@ app.MapDelete("/ordem-servico/deletar/{id}",([FromRoute] int id, [FromServices] 
 //cadastrando Produto
 app.MapPost("/produtos/cadastrar", ([FromBody] Produto[] produtos, [FromServices] AppDbContext ctx) => 
 {   
-    
-
     foreach (Produto produto in produtos)
     {
+        OrdemServico? ordemServico = ctx.OrdemServicos.FirstOrDefault(c => c.OrdemServicoId == produto.OrdemServicoId);
+
+        if (ordemServico is null)
+        {
+            return Results.NotFound("Ordem de Serviço não encontrada com este id: " + produto.OrdemServicoId);
+        }
+        produto.OrdemServico = ordemServico;
+
+        produto.ValorUnitario = produto.Largura * produto.Altura * produto.ValorM2;
+
+        produto.ValorSubTotal = produto.ValorUnitario * produto.Quantidade;   
+
+        produto.OrdemServico.ValorTotal += produto.ValorSubTotal;
+        produto.OrdemServico.ValorAPagar = produto.OrdemServico.ValorTotal - produto.OrdemServico.ValorDesconto;
+        
         ctx.Produtos.Add(produto);
     }
     
     ctx.SaveChanges();
-    return Results.Created("",produtos);
+    return Results.Created("", produtos);
 });
 
 //listando Produto
@@ -315,7 +339,7 @@ app.MapGet("/produtos/listar",([FromServices] AppDbContext ctx) =>
 {
     if (ctx.Produtos.Any())
     {
-        return Results.Ok(ctx.Produtos.ToList());
+        return Results.Ok(ctx.Produtos.Include(p => p.Acabamento).Include(p => p.Equipamento).ToList());
     }
     return Results.NotFound("Tabela vazia!");
 });
@@ -400,7 +424,5 @@ app.MapDelete("/pagamentos/deletar/{id}",([FromRoute] int id, [FromServices] App
     ctx.SaveChanges();
     return Results.Ok("Pagamento deletado com sucesso!");
 });
-
-
 
 app.Run();

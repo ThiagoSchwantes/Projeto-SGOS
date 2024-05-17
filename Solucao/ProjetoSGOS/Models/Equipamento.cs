@@ -13,7 +13,7 @@ namespace ProjetoSGOS.Models
         public string Nome { get; set; } = null!;
         public string? Descricao { get; set; }
 
-        public ICollection<Produto> Produtos { get; } = [];
+        public ICollection<Produto>? Produtos { get; }
 
     }
 }

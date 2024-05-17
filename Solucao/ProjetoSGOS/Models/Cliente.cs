@@ -36,5 +36,5 @@ public class Cliente
     [Required(ErrorMessage = "O Telefone é obrigatório")]
     public string Telefone { get; set; } = null!;
 
-    public ICollection<OrdemServico> OrdemServicos { get; } = [];
+    public ICollection<OrdemServico>? OrdemServicos { get; }
 }

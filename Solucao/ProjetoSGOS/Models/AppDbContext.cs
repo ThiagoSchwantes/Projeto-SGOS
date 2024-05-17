@@ -31,19 +31,19 @@ namespace ProjetoSGOS.Models
             modelBuilder.Entity<Cliente>()
                 .HasMany(c => c.OrdemServicos)
                 .WithOne(os => os.Cliente)  
-                .HasForeignKey(c => c.OrdemServicoId)
+                .HasForeignKey(c => c.ClienteId)
                 .IsRequired();
 
-            modelBuilder.Entity<OrdemServico>()
-                .HasOne(os => os.Vendedor)
-                .WithMany(c => c.OrdemServicos)
+            modelBuilder.Entity<Vendedor>()
+                .HasMany(v => v.OrdemServicos)
+                .WithOne(os => os.Vendedor)
                 .HasForeignKey(os => os.VendedorId)
                 .IsRequired();
             
-            modelBuilder.Entity<OrdemServico>()
-                .HasMany(os => os.Pagamentos)
-                .WithOne(c => c.OrdemServico)
-                .HasForeignKey(os => os.PagamentoId)
+            modelBuilder.Entity<Pagamento>()
+                .HasOne(p => p.OrdemServico)
+                .WithMany(os => os.Pagamentos)
+                .HasForeignKey(p => p.OrdemServicoId)
                 .IsRequired();
 
             modelBuilder.Entity<OrdemServico>()
