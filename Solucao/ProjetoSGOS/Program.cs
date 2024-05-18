@@ -20,6 +20,15 @@ app.MapPost("/clientes/cadastrar", ([FromBody] Cliente[] clientes, [FromServices
     int i = 1;
     foreach (Cliente cliente in clientes)
     {
+        Cliente? clienteExistente = ctx.Clientes.FirstOrDefault(c => c.CPF == cliente.CPF);
+        if (clienteExistente is null){
+            return Results.BadRequest("Um cliente já foi cadastrado com esse cpf");
+        }
+
+        clienteExistente = ctx.Clientes.FirstOrDefault(c => c.RG == cliente.RG);
+        if (clienteExistente is null){
+            return Results.BadRequest("Um cliente já foi cadastrado com esse RG");
+        }
         
         erroValidacao = Validator.TryValidateObject(cliente, new ValidationContext(cliente), erros, true);
 
@@ -51,6 +60,16 @@ app.MapPut("/clientes/alterar/{id}",([FromRoute] int id, [FromBody] Cliente clie
         return Results.NotFound("Cliente não encontrado!");
     }
 
+    Cliente? clienteExistente = ctx.Clientes.FirstOrDefault(c => (c.CPF == clienteAlterado.CPF) && (c.ClienteId != id));
+    if (clienteExistente is null){
+        return Results.BadRequest("Um cliente já foi cadastrado com esse cpf");
+    }
+
+    clienteExistente = ctx.Clientes.FirstOrDefault(c => (c.RG == clienteAlterado.RG) && (c.ClienteId != id));
+    if (clienteExistente is null){
+        return Results.BadRequest("Um cliente já foi cadastrado com esse RG");
+    }
+
     cliente.Nome = clienteAlterado.Nome;
     cliente.CPF = clienteAlterado.CPF;
     cliente.RG = clienteAlterado.RG;
@@ -80,15 +99,19 @@ app.MapDelete("/clientes/deletar/{id}",([FromRoute] int id, [FromServices] AppDb
 
 //-------------------------------------------------------------------------------------------------------
 //cadastrando vendedor
-app.MapPost("/vendedores/cadastrar", ([FromBody] Vendedor[] vendedors, [FromServices] AppDbContext ctx) => 
+app.MapPost("/vendedores/cadastrar", ([FromBody] Vendedor[] vendedores, [FromServices] AppDbContext ctx) => 
 {   
-    foreach (Vendedor vendedor in vendedors)
+    foreach (Vendedor vendedor in vendedores)
     {
+        Vendedor? vendedorExistente = ctx.Vendedores.FirstOrDefault(v => v.Usuario == vendedor.Usuario);
+        if (vendedorExistente is null){
+            return Results.BadRequest("Um vendedor já foi cadastrado com esse usuário (" + vendedor.Usuario + ")");
+        }
         ctx.Vendedores.Add(vendedor);
     }
     
     ctx.SaveChanges();
-    return Results.Created("",vendedors);
+    return Results.Created("", vendedores);
 });
 
 //listando vendedor
@@ -104,10 +127,15 @@ app.MapGet("/vendedores/listar",([FromServices] AppDbContext ctx) =>
 //alterar vendedor
 app.MapPut("/vendedores/alterar/{id}",([FromRoute] int id, [FromBody] Vendedor vendedorAlterado, [FromServices] AppDbContext ctx) =>
 {
-    Vendedor? vendedor = ctx.Vendedores.FirstOrDefault(c => c.VendedorId == id);
+    Vendedor? vendedor = ctx.Vendedores.FirstOrDefault(v => v.VendedorId == id);
     if (vendedor is null)
     {
         return Results.NotFound("vendedor não encontrado!");
+    }
+
+    Vendedor? vendedorExistente = ctx.Vendedores.FirstOrDefault(v => (v.Usuario == vendedorAlterado.Usuario) && (v.VendedorId != id));
+    if (vendedorExistente is null){
+        return Results.BadRequest("Um vendedor já foi cadastrado com esse usuário (" + vendedor.Usuario + ")");
     }
 
     vendedor.Nome = vendedorAlterado.Nome;
@@ -256,13 +284,14 @@ app.MapGet("/ordem-servico/listar",([FromServices] AppDbContext ctx) =>
 {
     if (ctx.OrdemServicos.Any())
     {
+
 #pragma warning disable CS8620 // O argumento não pode ser usado para o parâmetro devido a diferenças na nulidade dos tipos de referência.
         return Results.Ok(
             ctx.OrdemServicos?
             .Include(os => os.Produtos)
             .ThenInclude(p => p.Acabamento)?
             .Include(os => os.Produtos)
-            .ThenInclude(p => p.Equipamento)
+            .ThenInclude(p => p.Equipamento)?
             .Include(os => os.Vendedor)
             .Include(os => os.Cliente)
             .ToList()
@@ -276,6 +305,7 @@ app.MapGet("/ordem-servico/listar",([FromServices] AppDbContext ctx) =>
 app.MapPut("/ordem-servico/alterar/{id}",([FromRoute] int id, [FromBody] OrdemServico ordemServicoAlterada, [FromServices] AppDbContext ctx) =>
 {
     OrdemServico? ordemServico = ctx.OrdemServicos.FirstOrDefault(c => c.OrdemServicoId == id);
+    
     if (ordemServico is null){
         return Results.NotFound("Ordem de Serviço não encontrada!");
     }
@@ -283,6 +313,7 @@ app.MapPut("/ordem-servico/alterar/{id}",([FromRoute] int id, [FromBody] OrdemSe
     ordemServico.Observacoes = ordemServicoAlterada.Observacoes;
     ordemServico.ClienteId = ordemServicoAlterada.ClienteId;
     ordemServico.VendedorId = ordemServicoAlterada.VendedorId;
+    ordemServico.Status = 0;
     
 
     ctx.OrdemServicos.Update(ordemServico);
@@ -373,63 +404,10 @@ app.MapDelete("/produtos/deletar/{id}",([FromRoute] int id, [FromServices] AppDb
     return Results.Ok("Produto deletado com sucesso!");
 });
 
-//-------------------------------------------------------------------------------------------------------
-//cadastrando pagamento
-app.MapPost("/pagamentos/cadastrar", ([FromBody] Pagamento[] pagamentos, [FromServices] AppDbContext ctx) => 
-{   
-    foreach (Pagamento pagamento in pagamentos)
-    {
-        ctx.Pagamentos.Add(pagamento);
-    }
-    
-    ctx.SaveChanges();
-    return Results.Created("",pagamentos);
-});
-
-//listando pagamento
-app.MapGet("/pagamentos/listar",([FromServices] AppDbContext ctx) =>
-{
-    if (ctx.Pagamentos.Any())
-    {
-        return Results.Ok(ctx.Pagamentos.ToList());
-    }
-    return Results.NotFound("Tabela vazia!");
-});
-
-//alterar pagamento
-app.MapPut("/pagamentos/alterar/{id}",([FromRoute] int id, [FromBody] Pagamento pagamentoAlterado, [FromServices] AppDbContext ctx) =>
-{
-    Pagamento? pagamento = ctx.Pagamentos.FirstOrDefault(c => c.PagamentoId == id);
-    if (pagamento is null){
-        return Results.NotFound("Pagamento não encontrado!");
-    }
-
-    pagamento.Forma = pagamentoAlterado.Forma;
-    pagamento.Valor = pagamentoAlterado.Valor;
-    pagamento.OrdemServicoId = pagamentoAlterado.OrdemServicoId; 
-
-    ctx.Pagamentos.Update(pagamento);
-    ctx.SaveChanges();
-    return Results.Ok("Pagamento alterado com sucesso!");
-});
-
-//deletar pagamento
-app.MapDelete("/pagamentos/deletar/{id}",([FromRoute] int id, [FromServices] AppDbContext ctx) =>
-{
-    Pagamento? pagamento = ctx.Pagamentos.FirstOrDefault(c => c.PagamentoId == id);
-    if (pagamento is null)
-    {
-        return Results.NotFound("Pagamento não encontrado!");
-    }
-    ctx.Pagamentos.Remove(pagamento);
-    ctx.SaveChanges();
-    return Results.Ok("Pagamento deletado com sucesso!");
-});
-
-
 app.MapPost("/vendedor/validacaoAcesso", (Vendedor vendedor, [FromServices] AppDbContext ctx) =>
 {
     var vendedorEncontrado = ctx.Vendedores.FirstOrDefault(v => v.Usuario == vendedor.Usuario && v.Senha == vendedor.Senha);
+
     if (vendedorEncontrado != null)
     {
         return Results.Ok("Acesso autorizado.");
@@ -441,18 +419,18 @@ app.MapPut("/ordem-servico/alterarStatus/{id}", ([FromRoute] int id, [FromServic
 {
 
     OrdemServico? ordemServico = ctx.OrdemServicos.FirstOrDefault(c => c.OrdemServicoId == id);
+    
     if (ordemServico is null)
     {
         return Results.NotFound("Ordem de Serviço não encontrada!");
     }
 
-    if (ordemServico.Status < Status.Baixada)
+    if (ordemServico.Status < Status.Finalizada)
     {
         ordemServico.Status++;
-    }
-    else
+    }else
     {
-        return Results.BadRequest("A ordem de serviço ja foi baixada e não pode ser incrementada.");
+        return Results.BadRequest("O status da ordem de serviço não pode ser atualizado, pois se encontra no status: " + ordemServico.Status.ToString());
     }
 
     ctx.OrdemServicos.Update(ordemServico);
@@ -461,5 +439,86 @@ app.MapPut("/ordem-servico/alterarStatus/{id}", ([FromRoute] int id, [FromServic
     return Results.Ok("Status da Ordem de Serviço alterado com sucesso!");
 });
 
+
+//-------------------------------------------------------------------------------------------------------
+//cadastrando Solicitação de baixa
+app.MapPost("/solicitar-baixa/{id}", ([FromRoute] int id, [FromBody] OrdemServico os, [FromServices] AppDbContext ctx) =>
+{ 
+    OrdemServico? OrdemServico = ctx.OrdemServicos.FirstOrDefault(os => os.OrdemServicoId == id);
+
+    if (OrdemServico is null)
+    {
+        return Results.NotFound("Ordem de Serviço não encontrada!");
+    }else if(OrdemServico.Status >= Status.SolicitadoBaixa){
+        return Results.BadRequest("Não é possivel fazer essa operação, pois a Ordem de Serviço já se encontra na situação: " + OrdemServico.Status);
+    }
+
+
+    if(os.Pagamentos is null || os.Pagamentos.Count == 0)
+    {
+        return Results.BadRequest(os.Pagamentos);
+    }
+
+    OrdemServico.ValorDesconto = os.ValorDesconto;
+    OrdemServico.ValorAPagar = OrdemServico.ValorTotal - os.ValorDesconto;
+
+    double valorTotalPagamento = os.Pagamentos.Sum(p => p.Valor);
+
+    if(valorTotalPagamento != OrdemServico.ValorAPagar){
+        double Comparacao = OrdemServico.ValorAPagar - valorTotalPagamento;
+        return Results.BadRequest("O pagamento está incorreto! R$" + Comparacao);
+    }
+
+    foreach (Pagamento pagamento in os.Pagamentos)
+    {
+        OrdemServico.Pagamentos?.Add(pagamento);
+    }
+
+    OrdemServico.Status = Status.SolicitadoBaixa;
+    ctx.OrdemServicos.Update(OrdemServico);
+    ctx.SaveChanges();
+
+    return Results.Ok("Solicitação de baixa realizada com sucesso!");
+});
+
+
+app.MapGet("/solicitar-baixa/listar",([FromServices] AppDbContext ctx) =>
+{
+    if (ctx.OrdemServicos.Any())
+    {
+#pragma warning disable CS8620 // O argumento não pode ser usado para o parâmetro devido a diferenças na nulidade dos tipos de referência.
+        return Results.Ok(
+            ctx.OrdemServicos?
+            .Include(os => os.Pagamentos)?
+            .Include(os => os.Produtos)
+            .ThenInclude(p => p.Acabamento)?
+            .Include(os => os.Produtos)
+            .ThenInclude(p => p.Equipamento)?
+            .Include(os => os.Vendedor)
+            .Include(os => os.Cliente)
+            .Where(os => os.Status == Status.SolicitadoBaixa)
+            .ToList()
+        );
+#pragma warning restore CS8620 // O argumento não pode ser usado para o parâmetro devido a diferenças na nulidade dos tipos de referência.
+    }
+
+    return Results.NotFound("Tabela vazia!");
+});
+
+app.MapPatch("/solicitar-baixa/autorizar/{id}", ([FromRoute] int id, [FromServices] AppDbContext ctx) =>
+{
+    OrdemServico? OrdemServico = ctx.OrdemServicos.FirstOrDefault(os => os.OrdemServicoId == id);
+
+    if (OrdemServico is null)
+    {
+        return Results.NotFound("Ordem de Serviço não encontrada!");
+    }
+
+    OrdemServico.Status = Status.Baixada;
+    ctx.OrdemServicos.Update(OrdemServico);
+    ctx.SaveChanges();
+
+    return Results.Ok("Ordem de serviço baixada!!");
+});
 
 app.Run();

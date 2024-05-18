@@ -11,8 +11,8 @@ using ProjetoSGOS.Models;
 namespace ProjetoSGOS.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240517200707_RevisaoModelos")]
-    partial class RevisaoModelos
+    [Migration("20240518202445_InicitialMigrate")]
+    partial class InicitialMigrate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -120,6 +120,7 @@ namespace ProjetoSGOS.Migrations
             modelBuilder.Entity("ProjetoSGOS.Models.OrdemServico", b =>
                 {
                     b.Property<int>("OrdemServicoId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("ClienteId")
@@ -148,6 +149,8 @@ namespace ProjetoSGOS.Migrations
 
                     b.HasKey("OrdemServicoId");
 
+                    b.HasIndex("ClienteId");
+
                     b.HasIndex("VendedorId");
 
                     b.ToTable("OrdemServicos");
@@ -156,6 +159,7 @@ namespace ProjetoSGOS.Migrations
             modelBuilder.Entity("ProjetoSGOS.Models.Pagamento", b =>
                 {
                     b.Property<int>("PagamentoId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Forma")
@@ -168,6 +172,8 @@ namespace ProjetoSGOS.Migrations
                         .HasColumnType("REAL");
 
                     b.HasKey("PagamentoId");
+
+                    b.HasIndex("OrdemServicoId");
 
                     b.ToTable("Pagamentos");
                 });
@@ -253,7 +259,7 @@ namespace ProjetoSGOS.Migrations
                 {
                     b.HasOne("ProjetoSGOS.Models.Cliente", "Cliente")
                         .WithMany("OrdemServicos")
-                        .HasForeignKey("OrdemServicoId")
+                        .HasForeignKey("ClienteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -272,7 +278,7 @@ namespace ProjetoSGOS.Migrations
                 {
                     b.HasOne("ProjetoSGOS.Models.OrdemServico", "OrdemServico")
                         .WithMany("Pagamentos")
-                        .HasForeignKey("PagamentoId")
+                        .HasForeignKey("OrdemServicoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

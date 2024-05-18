@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -26,9 +27,9 @@ namespace ProjetoSGOS.Models
         public int VendedorId { get; set; }
         public Vendedor Vendedor { get; set; } = null!;
 
-        public ICollection<Produto>? Produtos { get; }
+        public ICollection<Produto>? Produtos { get; } = [];
 
-        public ICollection<Pagamento>? Pagamentos { get; }
+        public ICollection<Pagamento>? Pagamentos { get; set; } = [];
     }
     public enum Status {
         EmProducao = 0,

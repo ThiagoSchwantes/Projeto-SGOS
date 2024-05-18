@@ -38,7 +38,7 @@ Content-Type: application/json
 
 {
     "nome": "Marcos Lopes",
-    "cpf" : "83374465510",
+    "cpf" : "109103500",
     "rg" : "999999999",
     "cep" : "82666300",
     "endereco" : "rua jose alfredo lopes 850",
@@ -192,7 +192,7 @@ Content-Type: application/json
 
 [
     {
-        "nome": "lona",
+        "nome": "outro produto",
         "descricao" : "lona 440g branco front-light com fundo black",
         "largura": 2.5,
         "altura": 2.5,
@@ -200,7 +200,7 @@ Content-Type: application/json
         "quantidade": 10,
         "equipamentoId": 1,
         "acabamentoId": 1,
-        "ordemServicoId": 1
+        "ordemServicoId": 2
     }
 ]
 
@@ -230,13 +230,7 @@ Content-Type: application/json
 [
     {
         "forma": 0,
-        "valor": 1000,
-        "ordemServicoId": 1
-    },
-    
-    {
-        "forma": 1,
-        "valor": 1187.5,
+        "valor": 6838.5,
         "ordemServicoId": 1
     }
 ]
@@ -270,8 +264,35 @@ Content-Type: application/json
 
 # STATUS #####################
 ### incrementando status
-PUT {{base_url}}/ordem-servico/alterarStatus/1
+PUT {{base_url}}/ordem-servico/alterarStatus/6
 Content-Type: application/json
 
 ###listando OS para demonstração
 GET {{base_url}}/ordem-servico/listar
+
+# Solicitação de Baixa ############################
+###Criar uma nova solicitação
+POST {{base_url}}/solicitar-baixa/1
+Content-Type: application/json
+
+{
+    "valorDesconto": 100,
+    "pagamentos":[
+        {
+            "forma": 0,
+            "valor": 2400,
+            "OrdemServicoId": 1 
+        },
+        {
+            "forma": 1,
+            "valor": 1875,
+            "OrdemServicoId": 1 
+        }
+    ]
+}
+
+###Listar
+GET {{base_url}}/solicitar-baixa/listar
+
+###Autorizar
+GET {{base_url}}/solicitar-baixa/autorizar
