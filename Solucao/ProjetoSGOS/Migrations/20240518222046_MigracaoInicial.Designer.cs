@@ -11,8 +11,8 @@ using ProjetoSGOS.Models;
 namespace ProjetoSGOS.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240518202445_InicitialMigrate")]
-    partial class InicitialMigrate
+    [Migration("20240518222046_MigracaoInicial")]
+    partial class MigracaoInicial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
