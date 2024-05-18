@@ -257,3 +257,21 @@ Content-Type: application/json
 
 ### deletar pagamento
 DELETE {{base_url}}/pagamentos/deletar/2
+
+# VALIDAÇÃO DE ACESSO ############################
+###validando acesso
+POST {{base_url}}/vendedor/validacaoAcesso
+Content-Type: application/json
+
+{
+    "usuario": "joaquim",
+    "senha" : "maioral"
+}
+
+# STATUS #####################
+### incrementando status
+PUT {{base_url}}/ordem-servico/alterarStatus/1
+Content-Type: application/json
+
+###listando OS para demonstração
+GET {{base_url}}/ordem-servico/listar

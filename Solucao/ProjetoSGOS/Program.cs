@@ -426,4 +426,40 @@ app.MapDelete("/pagamentos/deletar/{id}",([FromRoute] int id, [FromServices] App
     return Results.Ok("Pagamento deletado com sucesso!");
 });
 
+
+app.MapPost("/vendedor/validacaoAcesso", (Vendedor vendedor, [FromServices] AppDbContext ctx) =>
+{
+    var vendedorEncontrado = ctx.Vendedores.FirstOrDefault(v => v.Usuario == vendedor.Usuario && v.Senha == vendedor.Senha);
+    if (vendedorEncontrado != null)
+    {
+        return Results.Ok("Acesso autorizado.");
+    }
+    return Results.BadRequest("Usuário ou senha incorreto.");
+});
+
+app.MapPut("/ordem-servico/alterarStatus/{id}", ([FromRoute] int id, [FromServices] AppDbContext ctx) =>
+{
+
+    OrdemServico? ordemServico = ctx.OrdemServicos.FirstOrDefault(c => c.OrdemServicoId == id);
+    if (ordemServico is null)
+    {
+        return Results.NotFound("Ordem de Serviço não encontrada!");
+    }
+
+    if (ordemServico.Status < Status.Baixada)
+    {
+        ordemServico.Status++;
+    }
+    else
+    {
+        return Results.BadRequest("A ordem de serviço ja foi baixada e não pode ser incrementada.");
+    }
+
+    ctx.OrdemServicos.Update(ordemServico);
+    ctx.SaveChanges();
+
+    return Results.Ok("Status da Ordem de Serviço alterado com sucesso!");
+});
+
+
 app.Run();
