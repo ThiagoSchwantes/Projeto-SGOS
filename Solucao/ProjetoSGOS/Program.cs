@@ -44,9 +44,9 @@ app.MapGet("/clientes/listar",([FromServices] AppDbContext ctx) =>
 });
 
 //alterar clientes
-app.MapPut("/clientes/alterar/{cpf}",([FromRoute] string cpf, [FromBody] Cliente clienteAlterado, [FromServices] AppDbContext ctx) =>
+app.MapPut("/clientes/alterar/{id}",([FromRoute] int id, [FromBody] Cliente clienteAlterado, [FromServices] AppDbContext ctx) =>
 {
-    Cliente? cliente = ctx.Clientes.FirstOrDefault(c => c.CPF == cpf);
+    Cliente? cliente = ctx.Clientes.FirstOrDefault(c => c.ClienteId == id);
     if (cliente is null){
         return Results.NotFound("Cliente não encontrado!");
     }
@@ -66,12 +66,12 @@ app.MapPut("/clientes/alterar/{cpf}",([FromRoute] string cpf, [FromBody] Cliente
 });
 
 //deletar cliente
-app.MapDelete("/clientes/deletar/{cpf}",([FromRoute] string cpf, [FromServices] AppDbContext ctx) =>
+app.MapDelete("/clientes/deletar/{id}",([FromRoute] int id, [FromServices] AppDbContext ctx) =>
 {
-    Cliente? cliente = ctx.Clientes.FirstOrDefault(c => c.CPF == cpf);
+    Cliente? cliente = ctx.Clientes.FirstOrDefault(c => c.ClienteId == id);
     if (cliente is null)
     {
-        return Results.NotFound("Produto não encontrado!");
+        return Results.NotFound("Cliente não encontrado!");
     }
     ctx.Clientes.Remove(cliente);
     ctx.SaveChanges();
@@ -102,9 +102,9 @@ app.MapGet("/vendedores/listar",([FromServices] AppDbContext ctx) =>
 });
 
 //alterar vendedor
-app.MapPut("/vendedores/alterar/{usuario}",([FromRoute] string usuario, [FromBody] Vendedor vendedorAlterado, [FromServices] AppDbContext ctx) =>
+app.MapPut("/vendedores/alterar/{id}",([FromRoute] int id, [FromBody] Vendedor vendedorAlterado, [FromServices] AppDbContext ctx) =>
 {
-    Vendedor? vendedor = ctx.Vendedores.FirstOrDefault(c => c.Usuario == usuario);
+    Vendedor? vendedor = ctx.Vendedores.FirstOrDefault(c => c.VendedorId == id);
     if (vendedor is null)
     {
         return Results.NotFound("vendedor não encontrado!");
@@ -120,9 +120,9 @@ app.MapPut("/vendedores/alterar/{usuario}",([FromRoute] string usuario, [FromBod
 });
 
 //deletar vendedor
-app.MapDelete("/vendedores/deletar/{usuario}",([FromRoute] string usuario, [FromServices] AppDbContext ctx) =>
+app.MapDelete("/vendedores/deletar/{id}",([FromRoute] int id, [FromServices] AppDbContext ctx) =>
 {
-    Vendedor? Vendedor = ctx.Vendedores.FirstOrDefault(c => c.Usuario == usuario);
+    Vendedor? Vendedor = ctx.Vendedores.FirstOrDefault(c => c.VendedorId == id);
     if (Vendedor is null)
     {
         return Results.NotFound("vendedor não encontrado!");

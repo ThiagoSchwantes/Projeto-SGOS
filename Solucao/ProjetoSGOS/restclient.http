@@ -33,7 +33,7 @@ Content-Type: application/json
 GET {{base_url}}/clientes/listar
 
 ### alterar cliente pelo cpf
-PUT {{base_url}}/clientes/alterar/12345678910
+PUT {{base_url}}/clientes/alterar/1
 Content-Type: application/json
 
 {
@@ -48,10 +48,10 @@ Content-Type: application/json
 }
 
 ### deletar cliente
-DELETE {{base_url}}/clientes/deletar/83374465510
+DELETE {{base_url}}/clientes/deletar/2
 
 # VENDEDOR ######################################
-###criar vendedor
+###cadastro vendedor
 POST {{base_url}}/vendedores/cadastrar
 Content-Type: application/json
 
@@ -73,7 +73,7 @@ Content-Type: application/json
 GET {{base_url}}/vendedores/listar
 
 ### alterar vendedor pelo usuario
-PUT {{base_url}}/vendedores/alterar/carlos
+PUT {{base_url}}/vendedores/alterar/1
 Content-Type: application/json
 
 {
@@ -83,7 +83,7 @@ Content-Type: application/json
 }
 
 ### deletar vendedor pelo usuario
-DELETE {{base_url}}/vendedores/deletar/carlos
+DELETE {{base_url}}/vendedores/deletar/2
 
 # ACABAMENTO ######################################
 ###criar acabamento
