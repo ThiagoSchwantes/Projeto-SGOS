@@ -280,7 +280,6 @@ app.MapPut("/ordem-servico/alterar/{id}",([FromRoute] int id, [FromBody] OrdemSe
         return Results.NotFound("Ordem de Serviço não encontrada!");
     }
 
-    ordemServico.Status = ordemServicoAlterada.Status;
     ordemServico.Observacoes = ordemServicoAlterada.Observacoes;
     ordemServico.ClienteId = ordemServicoAlterada.ClienteId;
     ordemServico.VendedorId = ordemServicoAlterada.VendedorId;
@@ -406,6 +405,8 @@ app.MapPut("/pagamentos/alterar/{id}",([FromRoute] int id, [FromBody] Pagamento 
     }
 
     pagamento.Forma = pagamentoAlterado.Forma;
+    pagamento.Valor = pagamentoAlterado.Valor;
+    pagamento.OrdemServicoId = pagamentoAlterado.OrdemServicoId; 
 
     ctx.Pagamentos.Update(pagamento);
     ctx.SaveChanges();

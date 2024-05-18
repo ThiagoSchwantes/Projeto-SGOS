@@ -156,19 +156,19 @@ Content-Type: application/json
 
 [
     {
-        "observacoes": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec hendrerit elementum nulla vel tincidunt. Cras sit amet neque et nulla.",
+        "observacoes": "faça a impressão na melhor qualidade.",
         "clienteId": 1,
         "vendedorId": 1
     },
     
     {
-        "observacoes": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec hendrerit elementum nulla vel tincidunt. Cras sit amet neque et nulla.",
+        "observacoes": "cuidado extra no acabamento.",
         "clienteId": 1,
-        "vendedorId": 2
+        "vendedorId": 1
     }
 ]
 
-### listar O
+### listar OS
 GET {{base_url}}/ordem-servico/listar
 
 ### alterar OS
@@ -177,9 +177,8 @@ Content-Type: application/json
 
 {
     "observacoes": "observacao alterada",
-    "status": 1,
-    "clienteId": 3,
-    "vendedorId": 5
+    "clienteId": 1,
+    "vendedorId": 1
 }
 
 ### deletar OS
@@ -200,18 +199,6 @@ Content-Type: application/json
         "valorM2": 35,
         "quantidade": 10,
         "equipamentoId": 1,
-        "acabamentoId": 2,
-        "ordemServicoId": 1
-    },
-    
-    {
-        "nome": "adesivo",
-        "descricao" : "adesivo 12mm black-out",
-        "largura": 3,
-        "altura": 1,
-        "valorM2": 23,
-        "quantidade": 4,
-        "equipamentoId": 2,
         "acabamentoId": 1,
         "ordemServicoId": 1
     }
@@ -221,7 +208,7 @@ Content-Type: application/json
 GET {{base_url}}/produtos/listar
 
 ### alterar produto
-PUT {{base_url}}/produtos/alterar/
+PUT {{base_url}}/produtos/alterar/1
 Content-Type: application/json
 
 {
@@ -232,7 +219,7 @@ Content-Type: application/json
 }
 
 ### deletar produto
-DELETE {{base_url}}/produtos/deletar/4
+DELETE {{base_url}}/produtos/deletar/1
 
 
 # PAGAMENTO ######################################
@@ -258,16 +245,15 @@ Content-Type: application/json
 GET {{base_url}}/pagamentos/listar
 
 ### alterar pagamento
-PUT {{base_url}}/pagamentos/alterar/224411f7-4f2e-4758-8b34-eb3d5e68668c
+PUT {{base_url}}/pagamentos/alterar/2
 Content-Type: application/json
+   
+{
+    "forma": 2,
+    "valor": 2187.5,
+    "ordemServicoId": 1
+}
 
-[    
-    {
-        "forma": 2,
-        "valor": 2187.5,
-        "ordemServicoId": 1
-    }
-]
 
 ### deletar pagamento
-DELETE {{base_url}}/pagamentos/deletar/1
+DELETE {{base_url}}/pagamentos/deletar/2
