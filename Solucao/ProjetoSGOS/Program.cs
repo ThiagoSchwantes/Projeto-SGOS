@@ -21,12 +21,12 @@ app.MapPost("/clientes/cadastrar", ([FromBody] Cliente[] clientes, [FromServices
     foreach (Cliente cliente in clientes)
     {
         Cliente? clienteExistente = ctx.Clientes.FirstOrDefault(c => c.CPF == cliente.CPF);
-        if (clienteExistente is null){
+        if (clienteExistente is not null){
             return Results.BadRequest("Um cliente já foi cadastrado com esse cpf");
         }
 
         clienteExistente = ctx.Clientes.FirstOrDefault(c => c.RG == cliente.RG);
-        if (clienteExistente is null){
+        if (clienteExistente is not null){
             return Results.BadRequest("Um cliente já foi cadastrado com esse RG");
         }
         
@@ -61,12 +61,12 @@ app.MapPut("/clientes/alterar/{id}",([FromRoute] int id, [FromBody] Cliente clie
     }
 
     Cliente? clienteExistente = ctx.Clientes.FirstOrDefault(c => (c.CPF == clienteAlterado.CPF) && (c.ClienteId != id));
-    if (clienteExistente is null){
+    if (clienteExistente is not null){
         return Results.BadRequest("Um cliente já foi cadastrado com esse cpf");
     }
 
     clienteExistente = ctx.Clientes.FirstOrDefault(c => (c.RG == clienteAlterado.RG) && (c.ClienteId != id));
-    if (clienteExistente is null){
+    if (clienteExistente is not null){
         return Results.BadRequest("Um cliente já foi cadastrado com esse RG");
     }
 
@@ -104,7 +104,7 @@ app.MapPost("/vendedores/cadastrar", ([FromBody] Vendedor[] vendedores, [FromSer
     foreach (Vendedor vendedor in vendedores)
     {
         Vendedor? vendedorExistente = ctx.Vendedores.FirstOrDefault(v => v.Usuario == vendedor.Usuario);
-        if (vendedorExistente is null){
+        if (vendedorExistente is not null){
             return Results.BadRequest("Um vendedor já foi cadastrado com esse usuário (" + vendedor.Usuario + ")");
         }
         ctx.Vendedores.Add(vendedor);
@@ -134,7 +134,7 @@ app.MapPut("/vendedores/alterar/{id}",([FromRoute] int id, [FromBody] Vendedor v
     }
 
     Vendedor? vendedorExistente = ctx.Vendedores.FirstOrDefault(v => (v.Usuario == vendedorAlterado.Usuario) && (v.VendedorId != id));
-    if (vendedorExistente is null){
+    if (vendedorExistente is not null){
         return Results.BadRequest("Um vendedor já foi cadastrado com esse usuário (" + vendedor.Usuario + ")");
     }
 
@@ -166,6 +166,10 @@ app.MapPost("/acabamentos/cadastrar", ([FromBody] Acabamento[] acabamentos, [Fro
 {   
     foreach (Acabamento acabamento in acabamentos)
     {
+        Acabamento? acabamentoExistente = ctx.Acabamentos.FirstOrDefault(a => a.Nome == acabamento.Nome);
+        if (acabamentoExistente is not null){
+            return Results.BadRequest("Um acabamento já foi cadastrado com esse nome (" + acabamento.Nome + ")");
+        }
         ctx.Acabamentos.Add(acabamento);
     }
     
@@ -191,6 +195,12 @@ app.MapPut("/acabamentos/alterar/{id}",([FromRoute] int id, [FromBody] Acabament
         return Results.NotFound("Acabamento não encontrado!");
     }
 
+    Acabamento? acabamentoExistente = ctx.Acabamentos.FirstOrDefault(a => (a.Nome == acabamentoAlterado.Nome) && (a.AcabamentoId != id));
+    if (acabamentoExistente is not null){
+        return Results.BadRequest("Um acabamento já foi cadastrado com esse nome (" + acabamento.Nome + ")");
+    }
+
+
     acabamento.Nome = acabamentoAlterado.Nome;
     acabamento.Descricao = acabamentoAlterado.Descricao;
 
@@ -215,9 +225,14 @@ app.MapDelete("/acabamentos/deletar/{id}",([FromRoute] int id, [FromServices] Ap
 //-------------------------------------------------------------------------------------------------------
 //cadastrando equipamento
 app.MapPost("/equipamentos/cadastrar", ([FromBody] Equipamento[] equipamentos, [FromServices] AppDbContext ctx) => 
-{   
+{ 
+
     foreach (Equipamento equipamento in equipamentos)
     {
+        Equipamento? equipamentoExistente = ctx.Equipamentos.FirstOrDefault(e => e.Nome == equipamento.Nome);
+        if (equipamentoExistente is not null){
+            return Results.BadRequest("Um equipamento já foi cadastrado com esse usuário (" + equipamento.Nome + ")");
+        }
         ctx.Equipamentos.Add(equipamento);
     }
     
@@ -241,6 +256,11 @@ app.MapPut("/equipamentos/alterar/{id}",([FromRoute] int id, [FromBody] Equipame
     Equipamento? equipamento = ctx.Equipamentos.FirstOrDefault(c => c.EquipamentoId == id);
     if (equipamento is null){
         return Results.NotFound("Equipamento não encontrado!");
+    }
+
+    Equipamento? equipamentoExistente = ctx.Equipamentos.FirstOrDefault(e => (e.Nome == equipamentoAlterado.Nome) && (e.EquipamentoId != id));
+    if (equipamentoExistente is not null){
+        return Results.BadRequest("Um acabamento já foi cadastrado com esse nome (" + equipamento.Nome + ")");
     }
 
     equipamento.Nome = equipamentoAlterado.Nome;
@@ -404,6 +424,7 @@ app.MapDelete("/produtos/deletar/{id}",([FromRoute] int id, [FromServices] AppDb
     return Results.Ok("Produto deletado com sucesso!");
 });
 
+//validação de acesso do vendedor/funcionario
 app.MapPost("/vendedor/validacaoAcesso", (Vendedor vendedor, [FromServices] AppDbContext ctx) =>
 {
     var vendedorEncontrado = ctx.Vendedores.FirstOrDefault(v => v.Usuario == vendedor.Usuario && v.Senha == vendedor.Senha);
@@ -415,6 +436,7 @@ app.MapPost("/vendedor/validacaoAcesso", (Vendedor vendedor, [FromServices] AppD
     return Results.BadRequest("Usuário ou senha incorreto.");
 });
 
+//alterar status da ordem de serviço pelo id
 app.MapPut("/ordem-servico/alterarStatus/{id}", ([FromRoute] int id, [FromServices] AppDbContext ctx) =>
 {
 
@@ -425,7 +447,7 @@ app.MapPut("/ordem-servico/alterarStatus/{id}", ([FromRoute] int id, [FromServic
         return Results.NotFound("Ordem de Serviço não encontrada!");
     }
 
-    if (ordemServico.Status < Status.Finalizada)
+    if (ordemServico.Status < Status.ProntoParaEntrega)
     {
         ordemServico.Status++;
     }else

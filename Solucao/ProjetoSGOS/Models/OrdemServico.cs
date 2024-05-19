@@ -34,7 +34,7 @@ namespace ProjetoSGOS.Models
     public enum Status {
         EmProducao = 0,
         EmAcabamento = 1,
-        Finalizada = 2,
+        ProntoParaEntrega = 2,
         SolicitadoBaixa = 3,
         Baixada = 4
     }

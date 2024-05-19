@@ -192,7 +192,7 @@ Content-Type: application/json
 
 [
     {
-        "nome": "outro produto",
+        "nome": "lona",
         "descricao" : "lona 440g branco front-light com fundo black",
         "largura": 2.5,
         "altura": 2.5,
@@ -200,7 +200,7 @@ Content-Type: application/json
         "quantidade": 10,
         "equipamentoId": 1,
         "acabamentoId": 1,
-        "ordemServicoId": 2
+        "ordemServicoId": 1
     }
 ]
 
@@ -221,37 +221,6 @@ Content-Type: application/json
 ### deletar produto
 DELETE {{base_url}}/produtos/deletar/1
 
-
-# PAGAMENTO ######################################
-###criar pagamento
-POST {{base_url}}/pagamentos/cadastrar
-Content-Type: application/json
-
-[
-    {
-        "forma": 0,
-        "valor": 6838.5,
-        "ordemServicoId": 1
-    }
-]
-
-### listar pagamento
-GET {{base_url}}/pagamentos/listar
-
-### alterar pagamento
-PUT {{base_url}}/pagamentos/alterar/2
-Content-Type: application/json
-   
-{
-    "forma": 2,
-    "valor": 2187.5,
-    "ordemServicoId": 1
-}
-
-
-### deletar pagamento
-DELETE {{base_url}}/pagamentos/deletar/2
-
 # VALIDAÇÃO DE ACESSO ############################
 ###validando acesso
 POST {{base_url}}/vendedor/validacaoAcesso
@@ -264,10 +233,10 @@ Content-Type: application/json
 
 # STATUS #####################
 ### incrementando status
-PUT {{base_url}}/ordem-servico/alterarStatus/6
+PUT {{base_url}}/ordem-servico/alterarStatus/1
 Content-Type: application/json
 
-###listando OS para demonstração
+###listando OS para demonstração do incremento acima
 GET {{base_url}}/ordem-servico/listar
 
 # Solicitação de Baixa ############################
@@ -291,8 +260,9 @@ Content-Type: application/json
     ]
 }
 
-###Listar
+###-Listar solitação de baixa junto com ordem de
+###   serviço e altera o status para 3-solitadoBaixa
 GET {{base_url}}/solicitar-baixa/listar
 
-###Autorizar
+###Autorizar a baixa e altera status para 4-baixada
 GET {{base_url}}/solicitar-baixa/autorizar
