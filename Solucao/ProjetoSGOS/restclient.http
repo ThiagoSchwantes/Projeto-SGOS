@@ -265,4 +265,4 @@ Content-Type: application/json
 GET {{base_url}}/solicitar-baixa/listar
 
 ###Autorizar a baixa e altera status para 4-baixada
-GET {{base_url}}/solicitar-baixa/autorizar
+PATCH  {{base_url}}/solicitar-baixa/autorizar/1
