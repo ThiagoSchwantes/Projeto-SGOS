@@ -29,11 +29,14 @@ Content-Type: application/json
     }
 ]
 
+### buscar cliente
+GET {{base_url}}/cliente/buscar/11
+
 ### listar cliente
 GET {{base_url}}/clientes/listar
 
 ### alterar cliente pelo cpf
-PUT {{base_url}}/clientes/alterar/1
+PUT {{base_url}}/clientes/alterar/7
 Content-Type: application/json
 
 {
@@ -48,7 +51,7 @@ Content-Type: application/json
 }
 
 ### deletar cliente
-DELETE {{base_url}}/clientes/deletar/2
+DELETE {{base_url}}/clientes/deletar/14
 
 # VENDEDOR ######################################
 ###cadastro vendedor
@@ -101,6 +104,9 @@ Content-Type: application/json
         "descricao" : "refile com estilete grande,solda com maquina de solda,grampeia as madeiras e bambante encima e embaixo,depois coloca a ponteira e grampeia."
     }
 ]
+
+### buscar acabamento
+GET {{base_url}}/acabamento/buscar/1
 
 ### listar acabamento
 GET {{base_url}}/acabamentos/listar
@@ -266,3 +272,6 @@ GET {{base_url}}/solicitar-baixa/listar
 
 ###Autorizar a baixa e altera status para 4-baixada
 PATCH  {{base_url}}/solicitar-baixa/autorizar/1
+
+###listando OS para demonstração do status acima
+GET {{base_url}}/ordem-servico/listar

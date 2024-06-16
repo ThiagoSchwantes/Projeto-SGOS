@@ -7,6 +7,15 @@ using System.ComponentModel.DataAnnotations;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>();
 builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options => options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+
+builder.Services.AddCors(options => 
+    options.AddPolicy("Acesso Total", 
+        configs => configs
+            .AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod())
+);
+
 var app = builder.Build();
 
 //--------------------------------------------------------------------------------------------------------------
@@ -40,6 +49,19 @@ app.MapPost("/clientes/cadastrar", ([FromBody] Cliente[] clientes, [FromServices
     }
     ctx.SaveChanges();
     return Results.Created("",clientes);
+});
+
+//buscar cliente
+app.MapGet("/cliente/buscar/{id}", ([FromRoute] int id, [FromServices] AppDbContext ctx) =>
+{
+    //Expressão lambda em c#
+    Cliente? cliente =
+        ctx.Clientes.FirstOrDefault(x => x.ClienteId == id);
+    if (cliente is null)
+    {
+        return Results.NotFound("Cliente não encontrado!");
+    }
+    return Results.Ok(cliente);
 });
 
 //listando clientes
@@ -81,7 +103,7 @@ app.MapPut("/clientes/alterar/{id}",([FromRoute] int id, [FromBody] Cliente clie
 
     ctx.Clientes.Update(cliente);
     ctx.SaveChanges();
-    return Results.Ok("Cliente alterado com sucesso!");
+    return Results.Ok(ctx.Clientes.ToList());
 });
 
 //deletar cliente
@@ -94,7 +116,7 @@ app.MapDelete("/clientes/deletar/{id}",([FromRoute] int id, [FromServices] AppDb
     }
     ctx.Clientes.Remove(cliente);
     ctx.SaveChanges();
-    return Results.Ok("Cliente deletado com sucesso!");
+    return Results.Ok(ctx.Clientes.ToList());
 });
 
 //-------------------------------------------------------------------------------------------------------
@@ -112,6 +134,19 @@ app.MapPost("/vendedores/cadastrar", ([FromBody] Vendedor[] vendedores, [FromSer
     
     ctx.SaveChanges();
     return Results.Created("", vendedores);
+});
+
+//buscar VENDEDOR
+app.MapGet("/vendedor/buscar/{id}", ([FromRoute] int id, [FromServices] AppDbContext ctx) =>
+{
+    //Expressão lambda em c#
+    Vendedor? vendedor =
+        ctx.Vendedores.FirstOrDefault(x => x.VendedorId == id);
+    if (vendedor is null)
+    {
+        return Results.NotFound("Vendedor não encontrado!");
+    }
+    return Results.Ok(vendedor);
 });
 
 //listando vendedor
@@ -144,7 +179,7 @@ app.MapPut("/vendedores/alterar/{id}",([FromRoute] int id, [FromBody] Vendedor v
 
     ctx.Vendedores.Update(vendedor);
     ctx.SaveChanges();
-    return Results.Ok("vendedor alterado com sucesso!");
+    return Results.Ok(ctx.Vendedores.ToList());
 });
 
 //deletar vendedor
@@ -157,7 +192,7 @@ app.MapDelete("/vendedores/deletar/{id}",([FromRoute] int id, [FromServices] App
     }
     ctx.Vendedores.Remove(Vendedor);
     ctx.SaveChanges();
-    return Results.Ok("vendedor deletado com sucesso!");
+    return Results.Ok(ctx.Vendedores.ToList());
 });
 
 //-------------------------------------------------------------------------------------------------------
@@ -175,6 +210,20 @@ app.MapPost("/acabamentos/cadastrar", ([FromBody] Acabamento[] acabamentos, [Fro
     
     ctx.SaveChanges();
     return Results.Created("",acabamentos);
+});
+
+//buscar acabamento
+
+app.MapGet("/acabamento/buscar/{id}", ([FromRoute] int id, [FromServices] AppDbContext ctx) =>
+{
+    //Expressão lambda em c#
+    Acabamento? acabamento =
+        ctx.Acabamentos.FirstOrDefault(x => x.AcabamentoId == id);
+    if (acabamento is null)
+    {
+        return Results.NotFound("Acabamento não encontrado!");
+    }
+    return Results.Ok(acabamento);
 });
 
 //listando acabamento
@@ -206,7 +255,7 @@ app.MapPut("/acabamentos/alterar/{id}",([FromRoute] int id, [FromBody] Acabament
 
     ctx.Acabamentos.Update(acabamento);
     ctx.SaveChanges();
-    return Results.Ok("Acabamento alterado com sucesso!");
+    return Results.Ok(ctx.Acabamentos.ToList());
 });
 
 //deletar acabamento
@@ -219,7 +268,7 @@ app.MapDelete("/acabamentos/deletar/{id}",([FromRoute] int id, [FromServices] Ap
     }
     ctx.Acabamentos.Remove(acabamento);
     ctx.SaveChanges();
-    return Results.Ok("Acabamento deletado com sucesso!");
+    return Results.Ok(ctx.Acabamentos.ToList());
 });
 
 //-------------------------------------------------------------------------------------------------------
@@ -238,6 +287,19 @@ app.MapPost("/equipamentos/cadastrar", ([FromBody] Equipamento[] equipamentos, [
     
     ctx.SaveChanges();
     return Results.Created("",equipamentos);
+});
+
+//buscar equipamento
+app.MapGet("/equipamento/buscar/{id}", ([FromRoute] int id, [FromServices] AppDbContext ctx) =>
+{
+    //Expressão lambda em c#
+    Equipamento? equipamento =
+        ctx.Equipamentos.FirstOrDefault(x => x.EquipamentoId == id);
+    if (equipamento is null)
+    {
+        return Results.NotFound("Equipamento não encontrado!");
+    }
+    return Results.Ok(equipamento);
 });
 
 //listando equipamento
@@ -268,7 +330,7 @@ app.MapPut("/equipamentos/alterar/{id}",([FromRoute] int id, [FromBody] Equipame
 
     ctx.Equipamentos.Update(equipamento);
     ctx.SaveChanges();
-    return Results.Ok("Equipamento alterado com sucesso!");
+    return Results.Ok(ctx.Equipamentos.ToList());
 });
 
 //deletar equipamento
@@ -281,7 +343,7 @@ app.MapDelete("/equipamentos/deletar/{id}",([FromRoute] int id, [FromServices] A
     }
     ctx.Equipamentos.Remove(equipamento);
     ctx.SaveChanges();
-    return Results.Ok("Equipamento deletado com sucesso!");
+    return Results.Ok(ctx.Equipamentos.ToList());
 });
 
 
@@ -543,4 +605,5 @@ app.MapPatch("/solicitar-baixa/autorizar/{id}", ([FromRoute] int id, [FromServic
     return Results.Ok("Ordem de serviço baixada!!");
 });
 
+app.UseCors("Acesso Total");
 app.Run();
