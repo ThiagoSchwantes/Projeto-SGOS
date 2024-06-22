@@ -30,15 +30,18 @@ function EquipamentoListar() {
     }
 
     return (
-        <div>
-            <table border={1}>
+        <div className="d-flex vh-100">
+            <div className="container my-auto text-center">
+            <h2>Lista de Equipamentos</h2>
+                <div className="table-responsive">
+            <table className="table table-striped table-bordered table-hover mt-2">
                 <thead>
-                    <tr>
-                        <th>Código</th>
-                        <th>Cadastrado Em</th>
-                        <th>Nome</th>
-                        <th>Descrição</th>
-                        <th>Ações</th>
+                    <tr className="table">
+                        <th style={{backgroundColor: '#3C3B6F', color: 'white'}}>Código</th>
+                        <th style={{backgroundColor: '#3C3B6F', color: 'white'}}>Criado Em</th>
+                        <th style={{backgroundColor: '#3C3B6F', color: 'white'}}>Nome</th>
+                        <th style={{backgroundColor: '#3C3B6F', color: 'white'}}>Descrição</th>
+                        <th style={{backgroundColor: '#3C3B6F', color: 'white'}}>Ações</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -49,13 +52,17 @@ function EquipamentoListar() {
                             <td>{equipamento.nome}</td>
                             <td>{equipamento.descricao}</td>
                             <td>
-                                <button onClick={() => {excluirEquipamento(equipamento.equipamentoId!)}}>Deletar</button>
-                                <button><Link to={`/pages/equipamento/alterar/${equipamento.equipamentoId}`}>Alterar</Link></button>
+                                <div className="btn-group" role="group">
+                                    <button className="btn mr-2" style={{backgroundColor: 'red', color: 'white'}} onClick={() => {excluirEquipamento(equipamento.equipamentoId!)}}>Deletar</button>
+                                    <Link to={`/pages/equipamento/alterar/${equipamento.equipamentoId}`} className="btn" style={{backgroundColor: '#39F700', color: 'black'}}>Alterar</Link>
+                                </div>
                             </td>
                         </tr>
                     ))}
                 </tbody>
             </table>
+            </div>
+            </div>
         </div>
     );
 }

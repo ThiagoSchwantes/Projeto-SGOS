@@ -1,6 +1,6 @@
 export interface Vendedor{
     vendedorId?: number;
-    nome: string;
+    nome?: string;
     usuario: string;
     senha: string;
 }

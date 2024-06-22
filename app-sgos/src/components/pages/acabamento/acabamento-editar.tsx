@@ -44,19 +44,29 @@ function AcabamentoEditar() {
   }
 
   return (
-    <div>
-      <h2>Alterar acabamento</h2>
-      <form onSubmit={alterar}>
-        <label>
-          Nome:
-          <input type="text" value={nome} onChange={(e: any) => setNome(e.target.value)} required />
-        </label>
-        <label>
-          Descrição:
-          <input type="text" value={descricao} onChange={(e: any) => setDescricao(e.target.value)} required />
-        </label>
-        <button type="submit">Salvar Alterações</button>
-      </form>
+    <div className="container w-50" style={{ marginTop: '8rem', backgroundColor: '#f8f9fa', padding: '2rem', borderRadius: '0.5rem'  }}>
+      <div className="row justify-content-center">
+        <div className="col-12">
+          <form onSubmit={alterar}>
+            <fieldset>
+              <legend className="mb-4 text-center" style={{ color: '#495057', whiteSpace: 'nowrap' }}>Alterar acabamento</legend>
+              <div className="mb-5">
+                  <label className="form-label" style={{ color: '#161A26' }}>Nome:</label>
+                  <input type="text" value={nome} className="form-control" onChange={(e: any) => setNome(e.target.value)} required />
+                  
+              </div>
+              <div className="mb-3">
+                  <label className="form-label" style={{ color: '#161A26' }}>Descrição:</label>
+                  <input type="text" value={descricao} className="form-control" onChange={(e: any) => {setDescricao(e.target.value)}} required />
+                  
+              </div>
+              <div className="text-center">
+                  <button type="submit" className="btn btn-success mt-3 w-50">Salvar Alterações</button>
+              </div>  
+            </fieldset>
+          </form>
+        </div>
+      </div>
     </div>
   );
 }

@@ -6,23 +6,23 @@ import axios from 'axios';
 function VendedorEditar() {
     const navigate = useNavigate();
     const { vendedorId } = useParams<{ vendedorId: string }>();
-    const [nome, setNome] = useState("");
-    const [usuario, setUsuario] = useState("");
-    const [senha, setSenha] = useState("");
+    const [nome, setNome] = useState<string>("");
+    const [usuario, setUsuario] = useState<string>("");
+    const [senha, setSenha] = useState<string>("");
 
     useEffect(() => {
         if (vendedorId) {
           axios.get<Vendedor>(`http://localhost:5223/vendedor/buscar/${vendedorId}`)
             .then((resposta) => {
-                setNome(resposta.data.nome);
-                setUsuario(resposta.data.usuario);
-                setSenha(resposta.data.senha);
+                setNome(resposta.data.nome ?? "");
+                setUsuario(resposta.data.usuario ?? "");
+                setSenha(resposta.data.senha ?? "");
             })
             .catch((error) => console.error('Erro ao buscar o vendedor:', error));
         }
-      }, []);
+      }, [vendedorId]);
 
-    function alterar(e: any) {
+    function alterar(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
         const vendedorAtualizado: Vendedor = {
@@ -47,25 +47,36 @@ function VendedorEditar() {
     }
 
     return (
-        <div>
-            <h2>Alterar Vendedor</h2>
-            <form onSubmit={alterar}>
-                <label>
-                    Nome:
-                    <input type="text" value={nome} onChange={(e: any) => setNome(e.target.value)} required />
-                </label>
-                <label>
-                    Usuário:
-                    <input type="text" value={usuario} onChange={(e: any) => setUsuario(e.target.value)} required />
-                </label>
-                <label>
-                    Senha:
-                    <input type="password" value={senha} onChange={(e: any) => setSenha(e.target.value)} required />
-                </label>
-                <button type="submit">Salvar Alterações</button>
-            </form>
+        <div className="container w-50" style={{ marginTop: '8rem', backgroundColor: '#f8f9fa', padding: '2rem', borderRadius: '0.5rem'  }}>
+            <div className="row justify-content-center">
+                <div className="col-12">
+                    <form onSubmit={alterar}>
+                        <fieldset>
+                            <legend className="mb-4 text-center" style={{ color: '#495057', whiteSpace: 'nowrap' }}>Alterar Vendedor</legend>
+                            <div className="mb-3">
+                                <label className="form-label" style={{ color: '#161A26' }}>Nome:</label>
+                                <input type="text" value={nome} className="form-control" onChange={(e) => setNome(e.target.value)} required />
+                                
+                            </div>
+                            <div className="mb-3">
+                                <label className="form-label" style={{ color: '#161A26' }}>Usuário:</label>
+                                <input type="text" value={usuario} className="form-control" onChange={(e) => setUsuario(e.target.value)} required />
+                            </div>
+                            <div className="mb-3">
+                                <label className="form-label" style={{ color: '#161A26' }}>Senha:</label>
+                                <input type="password" value={senha} className="form-control" onChange={(e) => setSenha(e.target.value)} required />
+                            </div>
+                            <div className="text-center">
+                                <button type="submit" className="btn btn-success mt-3 w-50">Salvar Alterações</button>
+                            </div>
+                            
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
         </div>
     );
 }
 
 export default VendedorEditar;
+

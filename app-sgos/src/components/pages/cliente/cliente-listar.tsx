@@ -30,21 +30,24 @@ function ClienteListar() {
     }
 
     return (
-        <div>
-            <table border={1}>
+        <div className="d-flex vh-100">
+            <div className="container my-auto text-center">
+            <h2>Lista de Clientes</h2>
+                <div className="table-responsive">
+            <table className="table table-striped table-bordered table-hover mt-2">
                 <thead>
-                    <tr>
-                        <th>Código</th>
-                        <th>Cadastrado Em</th>
-                        <th>Nome</th>
-                        <th>CPF</th>
-                        <th>RG</th>
-                        <th>CEP</th>
-                        <th>Endereço</th>
-                        <th>Bairro</th>
-                        <th>Cidade</th>
-                        <th>Telefone</th>
-                        <th>Ações</th>
+                    <tr className="table">
+                        <th style={{backgroundColor: '#3C3B6F', color: 'white'}}>Código</th>
+                        <th style={{backgroundColor: '#3C3B6F', color: 'white'}}>Criado Em</th>
+                        <th style={{backgroundColor: '#3C3B6F', color: 'white'}}>Nome</th>
+                        <th style={{backgroundColor: '#3C3B6F', color: 'white'}}>CPF</th>
+                        <th style={{backgroundColor: '#3C3B6F', color: 'white'}}>RG</th>
+                        <th style={{backgroundColor: '#3C3B6F', color: 'white'}}>CEP</th>
+                        <th style={{backgroundColor: '#3C3B6F', color: 'white'}}>Endereço</th>
+                        <th style={{backgroundColor: '#3C3B6F', color: 'white'}}>Bairro</th>
+                        <th style={{backgroundColor: '#3C3B6F', color: 'white'}}>Cidade</th>
+                        <th style={{backgroundColor: '#3C3B6F', color: 'white'}}>Telefone</th>
+                        <th style={{backgroundColor: '#3C3B6F', color: 'white'}}>Ações</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -61,13 +64,17 @@ function ClienteListar() {
                             <td>{cliente.cidade}</td>
                             <td>{cliente.telefone}</td>
                             <td>
-                                <button onClick={() => {excluirCliente(cliente.clienteId!)}}>Deletar</button>
-                                <button><Link to={`/pages/cliente/alterar/${cliente.clienteId}`}>Alterar</Link></button>
+                                <div className="btn-group" role="group">
+                                    <button className="btn mr-2" style={{backgroundColor: 'red', color: 'white'}} onClick={() => {excluirCliente(cliente.clienteId!)}}>Deletar</button>
+                                    <Link to={`/pages/cliente/alterar/${cliente.clienteId}`} className="btn" style={{backgroundColor: '#39F700', color: 'black'}}>Alterar</Link>
+                                </div>
                             </td>
                         </tr>
                     ))}
                 </tbody>
             </table>
+            </div>
+            </div>
         </div>
     );
 }
