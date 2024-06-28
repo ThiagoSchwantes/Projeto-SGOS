@@ -1,3 +1,7 @@
+import { Equipamento } from './Equipamento';
+import { Acabamento } from './Acabamento';
+import { OrdemServico } from './OrdemServico';
+
 export interface Produto {
     produtoId?: number;
     nome: string;
@@ -6,20 +10,11 @@ export interface Produto {
     altura: number;
     valorM2: number;
     quantidade: number;
-    valorUnitario: number;
-    valorSubTotal: number;
-    criadoEm: Date;
+    valorUnitario?: number;
+    valorSubTotal?: number;
     equipamentoId: number;
-    equipamento: Equipamento | null;
     acabamentoId: number;
-    acabamento: Acabamento | null;
+    ordemServicoId: number;
 }
-  
-export interface Equipamento {
-    equipamentoId: number;
-}
-  
-export interface Acabamento {
-    acabamentoId: number;
-}
+
   

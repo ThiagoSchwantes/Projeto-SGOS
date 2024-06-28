@@ -48,6 +48,7 @@ function AcabamentoCadastrar() {
                                 <input type="text" value={descricao} className="form-control" onChange={(e: any) => {setDescricao(e.target.value)}} required />
                                 
                             </div>
+                            
                             <div className="text-center">
                                 <button type="submit" className="btn btn-success mt-3 w-50">Cadastrar</button>
                             </div>

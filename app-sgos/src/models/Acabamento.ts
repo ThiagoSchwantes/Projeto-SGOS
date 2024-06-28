@@ -3,4 +3,6 @@ export interface Acabamento{
     criadoEm?: Date;
     nome: string;
     descricao: string;
+    dataHorarioAbertura?: Date;
+    
 }
