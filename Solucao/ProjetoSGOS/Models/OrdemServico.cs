@@ -18,7 +18,7 @@ namespace ProjetoSGOS.Models
 
         public string? Observacoes { get; set; }
     
-        public DateTime DataHorarioAbertura { get; set; } = DateTime.Today;
+        public DateTime DataHorarioAbertura { get; set; } = DateTime.Now;
         public Status Status { get; set; } = Status.EmProducao;
 
         public int ClienteId { get; set; }

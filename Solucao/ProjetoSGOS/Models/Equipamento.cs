@@ -8,7 +8,7 @@ namespace ProjetoSGOS.Models
     public class Equipamento
     {
         public int EquipamentoId { get; set; }
-        public DateTime CriadoEm { get; set; } = DateTime.Today;
+        public DateTime CriadoEm { get; set; } = DateTime.Now;
 
         public string Nome { get; set; } = null!;
         public string? Descricao { get; set; }

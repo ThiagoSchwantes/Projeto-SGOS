@@ -25,6 +25,7 @@ import VendedorEditar from "./components/pages/vendedor/vendedor-editar";
 import Login from './components/pages/loginAcesso/login';
 import PaginaInicial from "./components/pages/loginAcesso/paginaInicial";
 import CriarOs from "./components/pages/ordemServico/os-criar";
+import ListarOS from "./components/pages/ordemServico/listagem-os";
 
 function Navbar() {
     const { isAuthenticated, logout } = useAuth();
@@ -90,8 +91,9 @@ function Navbar() {
                                 </a>
                                 <ul className="dropdown-menu">
                                     <li><Link className="dropdown-item" to="/pages/ordemServico/cadastrar">Cadastrar Ordem de Serviço</Link></li>
-                                    {/* <li><Link className="dropdown-item" to="/pages/cliente/listar">Listar Cliente</Link></li> */}
+                                    <li><Link className="dropdown-item" to="/pages/ordemServico/listar">Listar  Ordem de Serviço</Link></li>
                                 </ul>
+                                
                             </li>
                         </ul>
                         <button className="btn btn-danger" onClick={logout}>Logout</button>
@@ -129,6 +131,8 @@ function App() {
                         <Route path='/pages/vendedor/alterar/:vendedorId' element={<PrivateRoute><VendedorEditar /></PrivateRoute>}></Route>
 
                         <Route path='/pages/ordemServico/cadastrar' element={<PrivateRoute><CriarOs/></PrivateRoute>}></Route>
+                        <Route path='/pages/ordemServico/listar' element={<PrivateRoute><ListarOS/></PrivateRoute>}></Route>
+
                     </Routes>
                 </AuthProvider>
             </BrowserRouter>

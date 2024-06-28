@@ -8,7 +8,7 @@ namespace ProjetoSGOS.Models;
 public class Cliente
 {
     public int ClienteId { get; set; }
-    public DateTime DataCadastro { get; set; } = DateTime.Today;
+    public DateTime DataCadastro { get; set; } = DateTime.Now;
     
 
     [Required(ErrorMessage = "O nome é obrigatório")]

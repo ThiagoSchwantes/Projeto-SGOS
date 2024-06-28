@@ -12,16 +12,21 @@ export interface OrdemServico {
     observacoes?: string;
     dataHorarioAbertura?: Date;
     status?: Status;
+
     clienteId: number;
+    cliente?: Cliente;
+
     vendedorId: number;
+    vendedor?: Vendedor;
+
     produtos?: Produto[];
     pagamentos?: Pagamento[];
 }
 
 export enum Status {
-    EmProducao = 0,
-    EmAcabamento = 1,
-    ProntoParaEntrega = 2,
-    SolicitadoBaixa = 3,
-    Baixada = 4
+    "Em Producao" = 0,
+    "Em Acabamento" = 1,
+    "Pronto Para Entrega" = 2,
+    "Solicitado Baixa" = 3,
+    "Baixada" = 4
 }

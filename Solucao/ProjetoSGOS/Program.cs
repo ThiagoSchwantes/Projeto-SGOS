@@ -349,16 +349,12 @@ app.MapDelete("/equipamentos/deletar/{id}",([FromRoute] int id, [FromServices] A
 
 //---------------------------------------------------------------------------------------------------------
 //cadastrando Ordem de Serviço
-app.MapPost("/ordem-servico/cadastrar", ([FromBody] OrdemServico[] ordemServicos, [FromServices] AppDbContext ctx) => 
+app.MapPost("/ordem-servico/cadastrar", ([FromBody] OrdemServico ordemServico, [FromServices] AppDbContext ctx) => 
 {   
-
-    foreach (OrdemServico ordemServico in ordemServicos)
-    {
-        ctx.OrdemServicos.Add(ordemServico);
-    }
-    
+    ctx.OrdemServicos.Add(ordemServico);
     ctx.SaveChanges();
-    return Results.Created("",ordemServicos);
+
+    return Results.Created("",ordemServico);
 });
 
 //listando Ordem de Serviço
@@ -420,30 +416,28 @@ app.MapDelete("/ordem-servico/deletar/{id}",([FromRoute] int id, [FromServices] 
 
 //---------------------------------------------------------------------------------------------------------
 //cadastrando Produto
-app.MapPost("/produtos/cadastrar", ([FromBody] Produto[] produtos, [FromServices] AppDbContext ctx) => 
+app.MapPost("/produtos/cadastrar", ([FromBody] Produto produto, [FromServices] AppDbContext ctx) => 
 {   
-    foreach (Produto produto in produtos)
+    OrdemServico? ordemServico = ctx.OrdemServicos.FirstOrDefault(c => c.OrdemServicoId == produto.OrdemServicoId);
+
+    if (ordemServico is null)
     {
-        OrdemServico? ordemServico = ctx.OrdemServicos.FirstOrDefault(c => c.OrdemServicoId == produto.OrdemServicoId);
-
-        if (ordemServico is null)
-        {
-            return Results.NotFound("Ordem de Serviço não encontrada com este id: " + produto.OrdemServicoId);
-        }
-        produto.OrdemServico = ordemServico;
-
-        produto.ValorUnitario = produto.Largura * produto.Altura * produto.ValorM2;
-
-        produto.ValorSubTotal = produto.ValorUnitario * produto.Quantidade;   
-
-        produto.OrdemServico.ValorTotal += produto.ValorSubTotal;
-        produto.OrdemServico.ValorAPagar = produto.OrdemServico.ValorTotal - produto.OrdemServico.ValorDesconto;
-        
-        ctx.Produtos.Add(produto);
+        return Results.NotFound("Ordem de Serviço não encontrada com este id: " + produto.OrdemServicoId);
     }
     
+    produto.OrdemServico = ordemServico;
+
+    produto.ValorUnitario = produto.Largura * produto.Altura * produto.ValorM2;
+
+    produto.ValorSubTotal = produto.ValorUnitario * produto.Quantidade;   
+
+    produto.OrdemServico.ValorTotal += produto.ValorSubTotal;
+    produto.OrdemServico.ValorAPagar = produto.OrdemServico.ValorTotal - produto.OrdemServico.ValorDesconto;
+    
+    ctx.Produtos.Add(produto);
+    
     ctx.SaveChanges();
-    return Results.Created("", produtos);
+    return Results.Created("", produto);
 });
 
 //listando Produto

@@ -25,7 +25,7 @@ namespace ProjetoSGOS.Models
         public double ValorUnitario { get; set; }
         public double ValorSubTotal { get; set; }
 
-        public DateTime CriadoEm { get; set; } = DateTime.Today;
+        public DateTime CriadoEm { get; set; } = DateTime.Now;
         
         public int EquipamentoId { get; set; }
         public Equipamento Equipamento { get; set; } = null!;
