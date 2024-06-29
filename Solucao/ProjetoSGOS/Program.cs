@@ -375,8 +375,7 @@ app.MapGet("/ordem-servico/listar",([FromServices] AppDbContext ctx) =>
 {
     if (ctx.OrdemServicos.Any())
     {
-
-#pragma warning disable CS8620 // O argumento não pode ser usado para o parâmetro devido a diferenças na nulidade dos tipos de referência.
+        #pragma warning disable CS8620 // O argumento não pode ser usado para o parâmetro devido a diferenças na nulidade dos tipos de referência.
         return Results.Ok(
             ctx.OrdemServicos?
             .Include(os => os.Produtos)
@@ -385,9 +384,10 @@ app.MapGet("/ordem-servico/listar",([FromServices] AppDbContext ctx) =>
             .ThenInclude(p => p.Equipamento)?
             .Include(os => os.Vendedor)
             .Include(os => os.Cliente)
+            .OrderBy(os => os.Status)
             .ToList()
         );
-#pragma warning restore CS8620 // O argumento não pode ser usado para o parâmetro devido a diferenças na nulidade dos tipos de referência.
+        #pragma warning restore CS8620 // O argumento não pode ser usado para o parâmetro devido a diferenças na nulidade dos tipos de referência.
     }
     return Results.NotFound("Tabela vazia!");
 });
@@ -582,6 +582,11 @@ app.MapPost("/solicitar-baixa/{id}", ([FromRoute] int id, [FromBody] OrdemServic
     if(os.Pagamentos is null || os.Pagamentos.Count == 0)
     {
         return Results.BadRequest(os.Pagamentos);
+    }
+
+    if( os.ValorDesconto > OrdemServico.ValorTotal){
+        double Comparacao = OrdemServico.ValorTotal - os.ValorDesconto;
+        return Results.BadRequest("O desconto está incorreto! R$" + Comparacao);
     }
 
     OrdemServico.ValorDesconto = os.ValorDesconto;

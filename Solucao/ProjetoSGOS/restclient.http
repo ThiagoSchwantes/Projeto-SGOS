@@ -274,8 +274,11 @@ Content-Type: application/json
 }
 
 ###-Listar solitação de baixa junto com ordem de
+###   serviço e altera o status para 3-solitadoBaixa
+GET {{base_url}}/solicitar-baixa/listar
+
 ###Autorizar a baixa e altera status para 4-baixada
-PATCH  {{base_url}}/solicitar-baixa/autorizar/1
+PATCH  {{base_url}}/solicitar-baixa/autorizar/13
 
 ###listando OS para demonstração do status acima
 GET {{base_url}}/ordem-servico/listar
