@@ -72,15 +72,7 @@ function Navbar() {
                                     <li><Link className="dropdown-item" to="/pages/equipamento/listar">Listar Equipamento</Link></li>
                                 </ul>
                             </li>
-                            <li className="nav-item dropdown">
-                                <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Vendedores
-                                </a>
-                                <ul className="dropdown-menu">
-                                    <li><Link className="dropdown-item" to="/pages/vendedor/cadastrar">Cadastrar Vendedor</Link></li>
-                                    <li><Link className="dropdown-item" to="/pages/vendedor/listar">Listar Vendedor</Link></li>
-                                </ul>
-                            </li>
+                            
                         </ul>
                         <div className="offcanvas-header">
                             <h5 className="offcanvas-title" id="offcanvasNavbarLabel">Menu de Cadastro</h5>
@@ -93,6 +85,30 @@ function Navbar() {
                                 <ul className="dropdown-menu">
                                     <li><Link className="dropdown-item" to="/pages/ordemServico/cadastrar">Cadastrar Ordem de Serviço</Link></li>
                                     <li><Link className="dropdown-item" to="/pages/ordemServico/listar">Listar  Ordem de Serviço</Link></li>
+                                </ul>
+                                
+                            </li>
+                        </ul>
+                        <div className="offcanvas-header">
+                            <h5 className="offcanvas-title" id="offcanvasNavbarLabel">Menu de Configuração</h5>
+                        </div>
+                        <ul className="navbar-nav justify-content-end flex-grow-1 pe-3">
+                            <li className="nav-item dropdown">
+                                <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Vendedores
+                                </a>
+                                <ul className="dropdown-menu">
+                                    <li><Link className="dropdown-item" to="/pages/vendedor/cadastrar">Cadastrar Vendedor</Link></li>
+                                    <li><Link className="dropdown-item" to="/pages/vendedor/listar">Listar Vendedor</Link></li>
+                                </ul>
+                            </li>
+                            <li className="nav-item dropdown">
+                                <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Baixa de Ordem de Serviço
+                                </a>
+                                <ul className="dropdown-menu">
+                                    <li><Link className="dropdown-item" to="pages/ordemServico/baixar">Baixar Ordem de Serviço</Link></li>
+                                    
                                 </ul>
                                 
                             </li>
@@ -135,6 +151,7 @@ function App() {
                         <Route path='/pages/ordemServico/listar' element={<PrivateRoute><ListarOS/></PrivateRoute>}></Route> 
                         <Route path='/pages/ordemServico/alterar/:ordemServicoId' element={<PrivateRoute><AlterarOS /></PrivateRoute>}></Route>
 
+                        
                     </Routes>
                 </AuthProvider>
             </BrowserRouter>
