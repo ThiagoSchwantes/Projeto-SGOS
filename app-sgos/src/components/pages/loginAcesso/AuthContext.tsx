@@ -13,7 +13,8 @@ interface AuthProviderProps {
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    // Defina isAuthenticated como true por padrão
+    const [isAuthenticated, setIsAuthenticated] = useState(true);
 
     const login = () => setIsAuthenticated(true);
     const logout = () => setIsAuthenticated(false);

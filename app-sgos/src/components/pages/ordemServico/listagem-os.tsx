@@ -29,7 +29,7 @@ function ListarOS() {
     }
 
     function excluirOrdem(ordemId: number) {
-        axios.delete(`http://localhost:5223//ordem-servico/deletar/${ordemId}`)
+        axios.delete(`http://localhost:5223/ordem-servico/deletar/${ordemId}`)
             .then((resposta) => {
                 setOrdens(resposta.data);
             })
@@ -67,9 +67,8 @@ function ListarOS() {
                             <td>R$ {ordem.valorAPagar}</td>
                             <td>
                                 <div className="btn-group" role="group">
-                                    <button className="btn mr-2" style={{backgroundColor: 'red', color: 'white'}} 
-                                    onClick={() => {excluirOrdem(ordem.ordemServicoId!)}}>Deletar</button>
-                                    <Link to={`/pages/os/alterar/${ordem.ordemServicoId}`} className="btn" style={{backgroundColor: '#39F700', color: 'black'}}>Alterar</Link>
+                                    <button className="btn mr-2" style={{backgroundColor: 'red', color: 'white'}} onClick={() => {excluirOrdem(ordem.ordemServicoId!)}}>Deletar</button>
+                                    <Link to={`/pages/ordemServico/alterar/${ordem.ordemServicoId}`} className="btn" style={{backgroundColor: '#39F700', color: 'black'}}>Alterar</Link>
                                 </div>
                             </td>
                         </tr>

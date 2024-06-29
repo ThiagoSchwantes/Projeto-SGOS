@@ -357,6 +357,19 @@ app.MapPost("/ordem-servico/cadastrar", ([FromBody] OrdemServico ordemServico, [
     return Results.Created("",ordemServico);
 });
 
+//buscar Ordem de Serviço
+app.MapGet("/ordem-servico/buscar/{id}", ([FromRoute] int id, [FromServices] AppDbContext ctx) =>
+{
+    OrdemServico? ordemServico =
+        ctx.OrdemServicos.FirstOrDefault(x => x.OrdemServicoId == id);
+    if (ordemServico is null)
+    {
+        return Results.NotFound("Ordem de serviço não encontrado!");
+    }
+    return Results.Ok(ordemServico);
+});
+
+
 //listando Ordem de Serviço
 app.MapGet("/ordem-servico/listar",([FromServices] AppDbContext ctx) =>
 {
@@ -410,7 +423,7 @@ app.MapDelete("/ordem-servico/deletar/{id}",([FromRoute] int id, [FromServices] 
 
     ctx.OrdemServicos.Remove(ordemServico);
     ctx.SaveChanges();
-    return Results.Ok("Ordem de Serviço deletada com sucesso!");
+    return Results.Ok(ctx.OrdemServicos.ToList());
 });
 
 
@@ -438,6 +451,18 @@ app.MapPost("/produtos/cadastrar", ([FromBody] Produto produto, [FromServices] A
     
     ctx.SaveChanges();
     return Results.Created("", produto);
+});
+
+//buscar Produto
+app.MapGet("/produtos/buscar/{id}", ([FromRoute] int id, [FromServices] AppDbContext ctx) =>
+{
+    Produto? produto =
+        ctx.Produtos.FirstOrDefault(x => x.OrdemServicoId == id);
+    if (produto is null)
+    {
+        return Results.NotFound("Produto não encontrado!");
+    }
+    return Results.Ok(produto);
 });
 
 //listando Produto

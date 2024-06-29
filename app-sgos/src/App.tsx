@@ -26,6 +26,7 @@ import Login from './components/pages/loginAcesso/login';
 import PaginaInicial from "./components/pages/loginAcesso/paginaInicial";
 import CriarOs from "./components/pages/ordemServico/os-criar";
 import ListarOS from "./components/pages/ordemServico/listagem-os";
+import AlterarOS from "./components/pages/ordemServico/alterar-os";
 
 function Navbar() {
     const { isAuthenticated, logout } = useAuth();
@@ -96,7 +97,7 @@ function Navbar() {
                                 
                             </li>
                         </ul>
-                        <button className="btn btn-danger" onClick={logout}>Logout</button>
+                        {/* <button className="btn btn-danger" onClick={logout}>Logout</button> */}
                     </div>
                 </div>
             </div>
@@ -131,7 +132,8 @@ function App() {
                         <Route path='/pages/vendedor/alterar/:vendedorId' element={<PrivateRoute><VendedorEditar /></PrivateRoute>}></Route>
 
                         <Route path='/pages/ordemServico/cadastrar' element={<PrivateRoute><CriarOs/></PrivateRoute>}></Route>
-                        <Route path='/pages/ordemServico/listar' element={<PrivateRoute><ListarOS/></PrivateRoute>}></Route>
+                        <Route path='/pages/ordemServico/listar' element={<PrivateRoute><ListarOS/></PrivateRoute>}></Route> 
+                        <Route path='/pages/ordemServico/alterar/:ordemServicoId' element={<PrivateRoute><AlterarOS /></PrivateRoute>}></Route>
 
                     </Routes>
                 </AuthProvider>

@@ -5,11 +5,13 @@ import { Equipamento } from "../../../models/Equipamento";
 import { Acabamento } from "../../../models/Acabamento";
 import { OrdemServico } from "../../../models/OrdemServico";
 import { Produto } from "../../../models/Produto";
-import { useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
-function CriarOs() {
+function AlterarOS() {
     const navigate = useNavigate();
+    const { ordemServicoId } = useParams<{ ordemServicoId: string }>();
+    const { produtoId } = useParams<{ produtoId: string }>();
     const [observacao, setObservacao] = useState("");
     const [descricao, setDescricao] = useState("");
 
@@ -18,6 +20,7 @@ function CriarOs() {
     const [altura, setAltura] = useState(0.0);
     const [valorM2, setValorM2] = useState(0.0);
     const [quantidade, setQuantidade] = useState(0);
+    const [status, setStatus] = useState(0);
 
     const [clienteId, setClienteId] = useState(0);
     const [clientes, setClientes] = useState<Cliente[]>([]);
@@ -25,10 +28,9 @@ function CriarOs() {
     const [vendedorId, setVendedorId] = useState(0);
     const [vendedores, setVendedores] = useState<Vendedor[]>([]);
 
-    
-   
     const [equipamentoId, setEquipamentoId] = useState(0);
     const [equipamentos, setEquipamentos] = useState<Equipamento[]>([]);
+
     const [acabamentoId, setAcabamentoId] = useState(0);
     const [acabamentos, setAcabamentos] = useState<Acabamento[]>([]);
 
@@ -52,22 +54,47 @@ function CriarOs() {
         axios.get("http://localhost:5223/acabamentos/listar").then((resposta) =>{
             setAcabamentos(resposta.data);
         });
+        
+        if (ordemServicoId) {
+            axios.get<OrdemServico>(`http://localhost:5223/ordem-servico/buscar/${ordemServicoId}`)
+                .then((resposta) => {
+                    setObservacao(resposta.data.observacoes ?? "");
+                    setClienteId(resposta.data.clienteId);
+                    setVendedorId(resposta.data.vendedorId);
+                })
+                .catch((error) => console.error('Erro ao buscar Ordem de serviço:', error));
+
+                axios.get<Produto>(`http://localhost:5223/produtos/buscar/${ordemServicoId}`)
+                .then((resposta) => {
+                    setNome(resposta.data.nome);
+                    setLargura(resposta.data.largura);
+                    setAltura(resposta.data.largura);
+                    setValorM2(resposta.data.valorM2);
+                    setQuantidade(resposta.data.quantidade);
+                    setEquipamentoId(resposta.data.equipamentoId);
+                    setAcabamentoId(resposta.data.acabamentoId);
+                })
+                .catch((error) => console.error('Erro ao buscar produto:', error));
+        }
+        
     }
 
-    function cadastrar(e: any) {
+    function alterar(e: any) {
         e.preventDefault();
 
-        axios.post("http://localhost:5223/ordem-servico/cadastrar", 
+    axios.post(`http://localhost:5223/ordem-servico/alterar/${ordemServicoId}`, 
             {
                 observacoes: observacao,
                 clienteId: clienteId,
-                vendedorId: vendedorId
+                vendedorId: vendedorId,
+                status: status
             }
         ).then((resposta) =>{
             const ordemServicoId = resposta.data.ordemServicoId;
 
-            axios.post("http://localhost:5223/produtos/cadastrar", 
-                {
+            axios.post(`http://localhost:5223/produtos/alterar/${produtoId}`, 
+                {/*1° - na API só tem nome e descrição para alterar,como vamos proceder com isso?altera a API ou altera aqui
+                    2° - a alteração acontece com o id do produto,isso está correto?não deveria ser pelo Id de ordem de serviço ou tanto faz? */
                     nome: nome,
                     descricao: descricao,
                     largura: largura,
@@ -89,15 +116,13 @@ function CriarOs() {
         <div className="container w-75" style={{ marginTop: '8rem', backgroundColor: '#f8f9fa', padding: '2rem', borderRadius: '0.5rem' }}>
             <div className="row justify-content-center">
                 <div className="col-12">
-                    <form onSubmit={cadastrar}>
+                    <form onSubmit={alterar}>
                         <fieldset>
-                            <legend className="mb-4 text-center" style={{ color: '#495057', whiteSpace: 'nowrap' }}>Criar Ordem de Serviço</legend>
+                            <legend className="mb-4 text-center" style={{ color: '#495057', whiteSpace: 'nowrap' }}>Alterar Ordem de Serviço</legend>
                             <div className="mb-3">
-
                                 <label className="form-label" style={{ color: '#161A26' }}>Cliente:</label>
-                                <select className="form-select" onChange={(e: any) => setClienteId(Number(e.target.value))} required>
-                                    <option>Selecione...</option>
-
+                                <select className="form-select" value={clienteId} onChange={(e: any) => setClienteId(Number(e.target.value))} required>
+                                    <option value={0}>Selecione...</option>
                                     {clientes.map((cliente) => (
                                         <option value={cliente.clienteId} key={cliente.clienteId}>
                                             {cliente.nome}
@@ -108,9 +133,8 @@ function CriarOs() {
 
                             <div className="mb-3">
                                 <label className="form-label" style={{ color: '#161A26' }}>Vendedor:</label>
-                                <select className="form-select" onChange={(e: any) => setVendedorId(Number(e.target.value))} required>
-                                    <option>Selecione...</option>
-
+                                <select className="form-select" value={vendedorId} onChange={(e: any) => setVendedorId(Number(e.target.value))} required>
+                                    <option value={0}>Selecione...</option>
                                     {vendedores.map((vendedor) => (
                                         <option value={vendedor.vendedorId} key={vendedor.vendedorId}>
                                             {vendedor.nome}
@@ -151,9 +175,8 @@ function CriarOs() {
 
                             <div className="mb-3">
                                 <label className="form-label" style={{ color: '#161A26' }}>Equipamento:</label>
-                                <select className="form-select" onChange={(e: any) => setEquipamentoId(Number(e.target.value))} required>
-                                    <option>Selecione...</option>
-
+                                <select className="form-select" value={equipamentoId} onChange={(e: any) => setEquipamentoId(Number(e.target.value))} required>
+                                    <option value={0}>Selecione...</option>
                                     {equipamentos.map((equipamento) => (
                                         <option value={equipamento.equipamentoId} key={equipamento.equipamentoId}>
                                             {equipamento.nome}
@@ -164,9 +187,8 @@ function CriarOs() {
 
                             <div className="mb-3">
                                 <label className="form-label" style={{ color: '#161A26' }}>Acabamento:</label>
-                                <select className="form-select" onChange={(e: any) => setAcabamentoId(Number(e.target.value))} required>
-                                    <option>Selecione...</option>
-
+                                <select className="form-select" value={acabamentoId} onChange={(e: any) => setAcabamentoId(Number(e.target.value))} required>
+                                    <option value={0}>Selecione...</option>
                                     {acabamentos.map((acabamento) => (
                                         <option value={acabamento.acabamentoId} key={acabamento.acabamentoId}>
                                             {acabamento.nome}
@@ -177,11 +199,11 @@ function CriarOs() {
 
                             <div className="mb-3">
                                 <label className="form-label" style={{ color: '#161A26' }}>Observação:</label>
-                                <input type="text" value={observacao} className="form-control" onChange={(e) => setObservacao(e.target.value)} required/>
+                                <input type="text" value={observacao} className="form-control" onChange={(e) => setObservacao(e.target.value)} required />
                             </div>
 
                             <div className="text-center">
-                                <button type="submit" className="btn btn-success mt-3 w-50">salvar</button>
+                                <button type="submit" className="btn btn-success mt-3 w-50">Salvar</button>
                             </div>
                         </fieldset>
                     </form>
@@ -191,4 +213,4 @@ function CriarOs() {
     );
 }
 
-export default CriarOs;
+export default AlterarOS;
