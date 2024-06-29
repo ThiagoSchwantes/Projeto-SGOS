@@ -10,32 +10,33 @@ import axios from "axios";
 
 function AlterarOS() {
     const navigate = useNavigate();
-    const { ordemServicoId } = useParams<{ ordemServicoId: string }>();
-    const { produtoId } = useParams<{ produtoId: string }>();
+
+    const { ordemServicoId } = useParams();
     const [observacao, setObservacao] = useState("");
-    const [descricao, setDescricao] = useState("");
+    const [vendedorId, setVendedorId] = useState(0);
+    const [clienteId, setClienteId] = useState(0);
 
     const [nome, setNome] = useState("");
+    const [descricao, setDescricao] = useState("");
+
     const [largura, setLargura] = useState(0.0);
     const [altura, setAltura] = useState(0.0);
     const [valorM2, setValorM2] = useState(0.0);
     const [quantidade, setQuantidade] = useState(0);
-    const [status, setStatus] = useState(0);
-
-    const [clienteId, setClienteId] = useState(0);
-    const [clientes, setClientes] = useState<Cliente[]>([]);
-
-    const [vendedorId, setVendedorId] = useState(0);
-    const [vendedores, setVendedores] = useState<Vendedor[]>([]);
-
     const [equipamentoId, setEquipamentoId] = useState(0);
-    const [equipamentos, setEquipamentos] = useState<Equipamento[]>([]);
-
     const [acabamentoId, setAcabamentoId] = useState(0);
+
+    const [clientes, setClientes] = useState<Cliente[]>([]);
+    const [vendedores, setVendedores] = useState<Vendedor[]>([]);
+    const [equipamentos, setEquipamentos] = useState<Equipamento[]>([]);
     const [acabamentos, setAcabamentos] = useState<Acabamento[]>([]);
 
     useEffect(() => {
-        carregarInformacoes();
+        if(Number.isNaN(Number(ordemServicoId)) || Number(ordemServicoId) < 1){
+            navigate("/pages/ordemServico/listar");
+        }else{
+            carregarInformacoes();
+        }
       }, []);
 
     function carregarInformacoes() {
@@ -54,62 +55,54 @@ function AlterarOS() {
         axios.get("http://localhost:5223/acabamentos/listar").then((resposta) =>{
             setAcabamentos(resposta.data);
         });
-        
-        if (ordemServicoId) {
-            axios.get<OrdemServico>(`http://localhost:5223/ordem-servico/buscar/${ordemServicoId}`)
-                .then((resposta) => {
-                    setObservacao(resposta.data.observacoes ?? "");
-                    setClienteId(resposta.data.clienteId);
-                    setVendedorId(resposta.data.vendedorId);
-                })
-                .catch((error) => console.error('Erro ao buscar Ordem de serviço:', error));
 
-                axios.get<Produto>(`http://localhost:5223/produtos/buscar/${ordemServicoId}`)
-                .then((resposta) => {
-                    setNome(resposta.data.nome);
-                    setLargura(resposta.data.largura);
-                    setAltura(resposta.data.largura);
-                    setValorM2(resposta.data.valorM2);
-                    setQuantidade(resposta.data.quantidade);
-                    setEquipamentoId(resposta.data.equipamentoId);
-                    setAcabamentoId(resposta.data.acabamentoId);
-                })
-                .catch((error) => console.error('Erro ao buscar produto:', error));
-        }
-        
+        axios.get<OrdemServico>(`http://localhost:5223/ordem-servico/buscar/${ordemServicoId}`)
+            .then((resposta) => {
+                setObservacao(resposta.data.observacoes ?? "");
+                setClienteId(resposta.data.clienteId);
+                setVendedorId(resposta.data.vendedorId);
+            })
+            .catch((error) => console.error('Erro ao buscar Ordem de serviço:', error));
+
+            axios.get<Produto>(`http://localhost:5223/produtos/buscar/${ordemServicoId}`)
+            .then((resposta) => {
+                setNome(resposta.data.nome);
+                setLargura(resposta.data.largura);
+                setAltura(resposta.data.altura);
+                setDescricao(resposta.data.descricao? resposta.data.descricao : "");
+                setValorM2(resposta.data.valorM2);
+                setQuantidade(resposta.data.quantidade);
+                setEquipamentoId(resposta.data.equipamentoId);
+                setAcabamentoId(resposta.data.acabamentoId);
+            })
+            .catch((error) => console.error('Erro ao buscar produto:', error));
     }
 
     function alterar(e: any) {
         e.preventDefault();
 
-    axios.post(`http://localhost:5223/ordem-servico/alterar/${ordemServicoId}`, 
-            {
-                observacoes: observacao,
-                clienteId: clienteId,
-                vendedorId: vendedorId,
-                status: status
-            }
-        ).then((resposta) =>{
-            const ordemServicoId = resposta.data.ordemServicoId;
-
-            axios.post(`http://localhost:5223/produtos/alterar/${produtoId}`, 
-                {/*1° - na API só tem nome e descrição para alterar,como vamos proceder com isso?altera a API ou altera aqui
-                    2° - a alteração acontece com o id do produto,isso está correto?não deveria ser pelo Id de ordem de serviço ou tanto faz? */
-                    nome: nome,
-                    descricao: descricao,
-                    largura: largura,
-                    altura: altura,
-                    valorM2: valorM2,
-                    quantidade: quantidade,
-                    equipamentoId: equipamentoId,
-                    acabamentoId: acabamentoId,
-                    ordemServicoId: ordemServicoId
+        axios.put(`http://localhost:5223/ordem-servico/alterar/${ordemServicoId}`, 
+                {
+                    observacoes: observacao,
+                    clienteId: clienteId,
+                    vendedorId: vendedorId,
                 }
-            ).then(()=>
-            {
-                navigate("/pages/ordemServico/listar");
-            });
-        });            
+            ).then(() =>{
+                axios.put(`http://localhost:5223/produtos/alterar/${ordemServicoId}`, 
+                    {
+                        nome: nome,
+                        descricao: descricao,
+                        largura: largura,
+                        altura: altura,
+                        valorM2: valorM2,
+                        quantidade: quantidade,
+                        equipamentoId: equipamentoId,
+                        acabamentoId: acabamentoId
+                    }
+                ).then(()=>{
+                    navigate("/pages/ordemServico/listar");
+                });
+            });            
     };
 
     return (

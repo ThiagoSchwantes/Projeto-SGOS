@@ -478,16 +478,38 @@ app.MapGet("/produtos/listar",([FromServices] AppDbContext ctx) =>
 //alterar Produto
 app.MapPut("/produtos/alterar/{id}",([FromRoute] int id, [FromBody] Produto produtoAlterado, [FromServices] AppDbContext ctx) =>
 {
-    Produto? produto = ctx.Produtos.FirstOrDefault(c => c.ProdutoId == id);
+    Produto? produto = ctx.Produtos.FirstOrDefault(c => c.OrdemServicoId == id);
+
     if (produto is null){
         return Results.NotFound("Produto não encontrado!");
     }
 
+    var valorAnterior = produto.ValorSubTotal;
+
     produto.Nome = produtoAlterado.Nome;
     produto.Descricao = produtoAlterado.Descricao;
-    
+    produto.Altura = produtoAlterado.Altura;
+    produto.Largura = produtoAlterado.Largura;
+    produto.ValorM2 = produtoAlterado.ValorM2;
+    produto.Quantidade = produtoAlterado.Quantidade;
+    produto.EquipamentoId = produtoAlterado.EquipamentoId;
+    produto.AcabamentoId = produtoAlterado.AcabamentoId;
+
+    produto.ValorUnitario = produto.Largura * produto.Altura * produto.ValorM2;
+    produto.ValorSubTotal = produto.ValorUnitario * produto.Quantidade;
+
+    OrdemServico? os = ctx.OrdemServicos.FirstOrDefault(c => c.OrdemServicoId == id);
+
+    if (os is null){
+        return Results.NotFound("OS não encontrada!");
+    }
+
+    os.ValorTotal += produto.ValorSubTotal - valorAnterior;
+    os.ValorAPagar=  os.ValorTotal - os.ValorDesconto;
+
 
     ctx.Produtos.Update(produto);
+    ctx.OrdemServicos.Update(os);
     ctx.SaveChanges();
     return Results.Ok("Produto alterado com sucesso!");
 });

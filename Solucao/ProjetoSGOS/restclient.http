@@ -177,6 +177,9 @@ Content-Type: application/json
 ### listar OS
 GET {{base_url}}/ordem-servico/listar
 
+### buscar Os
+GET {{base_url}}/ordem-servico/buscar/3
+
 ### alterar OS
 PUT {{base_url}}/ordem-servico/alterar/1
 Content-Type: application/json
@@ -213,8 +216,12 @@ Content-Type: application/json
 ### listar produto
 GET {{base_url}}/produtos/listar
 
+
+### buscar produto
+GET {{base_url}}/produtos/buscar/4
+
 ### alterar produto
-PUT {{base_url}}/produtos/alterar/1
+PUT {{base_url}}/produtos/alterar/3
 Content-Type: application/json
 
 {
@@ -267,9 +274,6 @@ Content-Type: application/json
 }
 
 ###-Listar solitação de baixa junto com ordem de
-###   serviço e altera o status para 3-solitadoBaixa
-GET {{base_url}}/solicitar-baixa/listar
-
 ###Autorizar a baixa e altera status para 4-baixada
 PATCH  {{base_url}}/solicitar-baixa/autorizar/1
 

@@ -13,6 +13,11 @@ export interface Produto {
     valorUnitario?: number;
     valorSubTotal?: number;
     criadoEm?: Date;
+
+    equipamento?: Equipamento;
+    acabamento?: Acabamento;
+    ordemServico?: OrdemServico;
+
     equipamentoId: number;
     acabamentoId: number;
     ordemServicoId: number;

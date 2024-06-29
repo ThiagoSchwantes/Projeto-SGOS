@@ -9,11 +9,9 @@ function ListarOS() {
     const [ordens, setOrdens] = useState<OrdemServico[]>([]);
     const navigate = useNavigate();
 
-
     function getStatusName(status: any) {
         return Status[status];
     }
-
 
     useEffect(() => {
         carregarOrdens();
@@ -23,7 +21,6 @@ function ListarOS() {
         axios.get("http://localhost:5223/ordem-servico/listar")
             .then(resposta =>{
                 setOrdens(resposta.data);
-                ordens.map(ordem => {console.log(ordem)});
             })
             .catch((error) => console.error('Erro ao listar ordem:', error));
     }
@@ -32,6 +29,27 @@ function ListarOS() {
         axios.delete(`http://localhost:5223/ordem-servico/deletar/${ordemId}`)
             .then((resposta) => {
                 setOrdens(resposta.data);
+            })
+            .catch((error) => console.error('Erro ao excluir ordem:', error));
+    }
+
+    function button(ordemId: number, status: Status){
+        
+        if(status == Status["Em Producao"] || status == Status["Em Acabamento"]){
+            return(
+                <button className="btn mr-2" style={{backgroundColor: 'black', color: 'white'}} onClick={() => {alterarStatus(ordemId)}}>Alterar Status</button>
+            );
+        }else if(status == Status["Pronto Para Entrega"]){
+            return(
+                <Link to={`/pages/ordemServico/solicitarBaixa/${ordemId}`} className="btn" style={{backgroundColor: 'black', color: 'white'}}>Solicitar Baixa</Link>
+            );
+        }        
+    }
+
+    function alterarStatus(ordemId: number) {
+        axios.put(`http://localhost:5223/ordem-servico/alterarStatus/${ordemId}`)
+            .then((resposta) => {
+                carregarOrdens();
             })
             .catch((error) => console.error('Erro ao excluir ordem:', error));
     }
@@ -69,6 +87,7 @@ function ListarOS() {
                                 <div className="btn-group" role="group">
                                     <button className="btn mr-2" style={{backgroundColor: 'red', color: 'white'}} onClick={() => {excluirOrdem(ordem.ordemServicoId!)}}>Deletar</button>
                                     <Link to={`/pages/ordemServico/alterar/${ordem.ordemServicoId}`} className="btn" style={{backgroundColor: '#39F700', color: 'black'}}>Alterar</Link>
+                                    {button(ordem.ordemServicoId!, ordem.status!)}
                                 </div>
                             </td>
                         </tr>
