@@ -66,7 +66,7 @@ function ClienteListar() {
 
     return (
         <div className="d-flex vh-100">
-            <div className="container my-auto text-center">
+            <div className="container my-auto text-center mt-5">
             <h2>Lista de Clientes</h2>
                 <div className="table-responsive">
             <table className="table table-striped table-bordered table-hover mt-2">
