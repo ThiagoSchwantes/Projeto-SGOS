@@ -56,8 +56,8 @@ function AcabamentoListar() {
                                     
                                     <td>
                                         <div className="btn-group" role="group">
-                                            <button  className="btn mr-2" style={{backgroundColor: 'red', color: 'white'}} onClick={() => {excluirAcabamento(acabamento.acabamentoId!)}}><BsTrash /></button>
-                                            <Link to={`/pages/acabamento/alterar/${acabamento.acabamentoId}`} className="btn" style={{backgroundColor: '#39F700', color: 'black'}}><BsPencil /></Link>
+                                            <button  className="btn mr-2" style={{backgroundColor: 'red', color: 'white'}} onClick={() => {excluirAcabamento(acabamento.acabamentoId!)}}>Deletar</button>
+                                            <Link to={`/pages/acabamento/alterar/${acabamento.acabamentoId}`} className="btn" style={{backgroundColor: '#39F700', color: 'black'}}>Alterar</Link>
                                         </div>
                                     </td>
                                 </tr>

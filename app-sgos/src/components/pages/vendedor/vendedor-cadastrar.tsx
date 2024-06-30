@@ -44,7 +44,7 @@ function VendedorCadastrar() {
                                 
                             </div>
                             <div className="mb-3">
-                                <label className="form-label" style={{ color: '#161A26' }}>Usuário::</label>
+                                <label className="form-label" style={{ color: '#161A26' }}>Usuário:</label>
                                 <input type="text" value={usuario} className="form-control" onChange={(e: any) => setUsuario(e.target.value)} required />
                             </div>
                             <div className="mb-3">

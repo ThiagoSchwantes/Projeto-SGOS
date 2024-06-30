@@ -120,6 +120,11 @@ function CriarOs() {
                             </div>
 
                             <div className="mb-3">
+                                <label className="form-label" style={{ color: '#161A26' }}>Observação:</label>
+                                <input type="text" value={observacao} className="form-control" onChange={(e) => setObservacao(e.target.value)} required/>
+                            </div>
+
+                            <div className="mb-3">
                                 <label className="form-label" style={{ color: '#161A26' }}>Produto:</label>
                                 <input type="text" value={nome} className="form-control" onChange={(e) => setNome(e.target.value)} required />
                             </div>
@@ -173,11 +178,6 @@ function CriarOs() {
                                         </option>
                                     ))}
                                 </select>
-                            </div>
-
-                            <div className="mb-3">
-                                <label className="form-label" style={{ color: '#161A26' }}>Observação:</label>
-                                <input type="text" value={observacao} className="form-control" onChange={(e) => setObservacao(e.target.value)} required/>
                             </div>
 
                             <div className="text-center">
