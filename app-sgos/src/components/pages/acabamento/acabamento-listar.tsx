@@ -50,8 +50,8 @@ function AcabamentoListar() {
                         
                         <td>
                             <div className="btn-group" role="group">
-                                <button  className="btn mr-2" style={{backgroundColor: 'red', color: 'white'}} onClick={() => {excluirAcabamento(acabamento.acabamentoId!)}}><BsTrash /></button>
-                                <Link to={`/pages/acabamento/alterar/${acabamento.acabamentoId}`} className="btn" style={{backgroundColor: '#39F700', color: 'black'}}><BsPencil /></Link>
+                                <button  className="btn mr-2" style={{backgroundColor: 'red', color: 'white'}} onClick={() => {excluirAcabamento(acabamento.acabamentoId!)}}>Deletar</button>
+                                <Link to={`/pages/acabamento/alterar/${acabamento.acabamentoId}`} className="btn" style={{backgroundColor: '#39F700', color: 'black'}}>Alterar</Link>
                             </div>
                         </td>
                     </tr>
@@ -77,25 +77,8 @@ function AcabamentoListar() {
                             </tr>
                         </thead>
                         <tbody>
-<<<<<<< HEAD
                             {lista()}
-=======
-                            {acabamento.map(acabamento => (
-                                <tr key={acabamento.acabamentoId}>
-                                    <td>{acabamento.acabamentoId}</td>
-                                    <td>{acabamento.criadoEm ? format(new Date(acabamento.criadoEm), 'dd/MM/yyyy') : 'N/A'}</td>
-                                    <td>{acabamento.nome}</td>
-                                    <td>{acabamento.descricao}</td>
-                                    
-                                    <td>
-                                        <div className="btn-group" role="group">
-                                            <button  className="btn mr-2" style={{backgroundColor: 'red', color: 'white'}} onClick={() => {excluirAcabamento(acabamento.acabamentoId!)}}>Deletar</button>
-                                            <Link to={`/pages/acabamento/alterar/${acabamento.acabamentoId}`} className="btn" style={{backgroundColor: '#39F700', color: 'black'}}>Alterar</Link>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))}
->>>>>>> 2eb0a949fb2ee87ff22cebbf7e70fea7bf4b314b
+                            
                         </tbody>
                     </table>
                 </div>
