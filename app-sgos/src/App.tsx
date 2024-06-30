@@ -27,6 +27,8 @@ import PaginaInicial from "./components/pages/loginAcesso/paginaInicial";
 import CriarOs from "./components/pages/ordemServico/os-criar";
 import ListarOS from "./components/pages/ordemServico/listagem-os";
 import AlterarOS from "./components/pages/ordemServico/alterar-os";
+import SolicitarBaixa from "./components/pages/ordemServico/solicitar-baixa";
+import BaixarOS from "./components/pages/ordemServico/baixar-os";
 
 function Navbar() {
     const { isAuthenticated, logout } = useAuth();
@@ -150,6 +152,8 @@ function App() {
                         <Route path='/pages/ordemServico/cadastrar' element={<PrivateRoute><CriarOs/></PrivateRoute>}></Route>
                         <Route path='/pages/ordemServico/listar' element={<PrivateRoute><ListarOS/></PrivateRoute>}></Route> 
                         <Route path='/pages/ordemServico/alterar/:ordemServicoId' element={<PrivateRoute><AlterarOS /></PrivateRoute>}></Route>
+                        <Route path='/pages/ordemServico/solicitarBaixa/:ordemServicoId' element={<PrivateRoute><SolicitarBaixa /></PrivateRoute>}></Route>
+                        <Route path='/pages/ordemServico/baixar' element={<PrivateRoute><BaixarOS/></PrivateRoute>}></Route>
 
                         
                     </Routes>

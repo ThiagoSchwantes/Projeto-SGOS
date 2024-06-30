@@ -13,12 +13,14 @@ function VendedorListar() {
     }, []);
 
     function carregarVendedores() {
-        fetch("http://localhost:5223/vendedores/listar")
-            .then((resposta) => resposta.json())
-            .then((vendedores: Vendedor[]) => {
-                console.table(vendedores);
-                setVendedores(vendedores);
-            });
+        axios.get("http://localhost:5223/vendedores/listar")
+        .then(resposta =>{
+            setVendedores(resposta.data);
+        })
+        .catch((error) => {
+            console.error('Erro ao listar:', error)
+            setVendedores([]);
+        });
     }
 
     function excluirVendedor(vendedorId: number) {
@@ -28,6 +30,32 @@ function VendedorListar() {
                 setVendedores(resposta.data);
             })
             .catch((error) => console.error('Erro ao excluir vendedor:', error));
+    }
+
+    function lista(){
+        if(vendedores.length == 0){
+            return(
+                <tr>
+                    <td colSpan={4}>Nenhum vendedor cadastrado</td>
+                </tr>
+            );
+        }else{
+            return(
+                vendedores.map(vendedor => (
+                    <tr key={vendedor.vendedorId}>
+                        <td>{vendedor.vendedorId}</td>
+                        <td>{vendedor.nome}</td>
+                        <td>{vendedor.usuario}</td>
+                        <td>
+                            <div className="btn-group" role="group">
+                                <button className="btn mr-2" style={{backgroundColor: 'red', color: 'white'}} onClick={() => {excluirVendedor(vendedor.vendedorId!)}}>Deletar</button>
+                                <Link to={`/pages/vendedor/alterar/${vendedor.vendedorId}`} className="btn" style={{backgroundColor: '#39F700', color: 'black'}}>Alterar</Link>
+                            </div>
+                        </td>
+                    </tr>
+                ))
+            );
+        }
     }
 
     return (
@@ -45,19 +73,7 @@ function VendedorListar() {
                     </tr>
                 </thead>
                 <tbody>
-                    {vendedores.map(vendedor => (
-                        <tr key={vendedor.vendedorId}>
-                            <td>{vendedor.vendedorId}</td>
-                            <td>{vendedor.nome}</td>
-                            <td>{vendedor.usuario}</td>
-                            <td>
-                                <div className="btn-group" role="group">
-                                    <button className="btn mr-2" style={{backgroundColor: 'red', color: 'white'}} onClick={() => {excluirVendedor(vendedor.vendedorId!)}}>Deletar</button>
-                                    <Link to={`/pages/vendedor/alterar/${vendedor.vendedorId}`} className="btn" style={{backgroundColor: '#39F700', color: 'black'}}>Alterar</Link>
-                                </div>
-                            </td>
-                        </tr>
-                    ))}
+                    {lista()}
                 </tbody>
             </table>
             </div>

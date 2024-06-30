@@ -13,12 +13,14 @@ function EquipamentoListar() {
     }, []);
 
     function carregarEquipamentos() {
-        fetch("http://localhost:5223/equipamentos/listar")
-            .then((resposta) => resposta.json())
-            .then((equipamentos: Equipamento[]) => {
-                console.table(equipamentos);
-                setEquipamentos(equipamentos);
-            });
+        axios.get("http://localhost:5223/equipamentos/listar")
+        .then(resposta =>{
+            setEquipamentos(resposta.data);
+        })
+        .catch((error) => {
+            console.error('Erro ao listar:', error)
+            setEquipamentos([]);
+        });
     }
 
     function excluirEquipamento(equipamentoId: number) {
@@ -27,6 +29,33 @@ function EquipamentoListar() {
                 setEquipamentos(resposta.data);
             })
             .catch((error) => console.error('Erro ao excluir equipamento:', error));
+    }
+
+    function lista(){
+        if(equipamentos.length == 0){
+            return(
+                <tr>
+                    <td colSpan={5}>Nenhum equipamento cadastrado</td>
+                </tr>
+            );
+        }else{
+            return(
+                equipamentos.map(equipamento => (
+                    <tr key={equipamento.equipamentoId}>
+                        <td>{equipamento.equipamentoId}</td>
+                        <td>{equipamento.criadoEm ? format(new Date(equipamento.criadoEm), 'dd/MM/yyyy') : 'N/A'}</td>
+                        <td>{equipamento.nome}</td>
+                        <td>{equipamento.descricao}</td>
+                        <td>
+                            <div className="btn-group" role="group">
+                                <button className="btn mr-2" style={{backgroundColor: 'red', color: 'white'}} onClick={() => {excluirEquipamento(equipamento.equipamentoId!)}}>Deletar</button>
+                                <Link to={`/pages/equipamento/alterar/${equipamento.equipamentoId}`} className="btn" style={{backgroundColor: '#39F700', color: 'black'}}>Alterar</Link>
+                            </div>
+                        </td>
+                    </tr>
+                ))
+            );
+        }
     }
 
     return (
@@ -45,20 +74,7 @@ function EquipamentoListar() {
                     </tr>
                 </thead>
                 <tbody>
-                    {equipamentos.map(equipamento => (
-                        <tr key={equipamento.equipamentoId}>
-                            <td>{equipamento.equipamentoId}</td>
-                            <td>{equipamento.criadoEm ? format(new Date(equipamento.criadoEm), 'dd/MM/yyyy') : 'N/A'}</td>
-                            <td>{equipamento.nome}</td>
-                            <td>{equipamento.descricao}</td>
-                            <td>
-                                <div className="btn-group" role="group">
-                                    <button className="btn mr-2" style={{backgroundColor: 'red', color: 'white'}} onClick={() => {excluirEquipamento(equipamento.equipamentoId!)}}>Deletar</button>
-                                    <Link to={`/pages/equipamento/alterar/${equipamento.equipamentoId}`} className="btn" style={{backgroundColor: '#39F700', color: 'black'}}>Alterar</Link>
-                                </div>
-                            </td>
-                        </tr>
-                    ))}
+                    {lista()}
                 </tbody>
             </table>
             </div>

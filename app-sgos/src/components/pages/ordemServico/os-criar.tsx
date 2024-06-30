@@ -14,22 +14,20 @@ function CriarOs() {
     const [descricao, setDescricao] = useState("");
 
     const [nome, setNome] = useState("");
-    const [largura, setLargura] = useState(0.0);
-    const [altura, setAltura] = useState(0.0);
-    const [valorM2, setValorM2] = useState(0.0);
-    const [quantidade, setQuantidade] = useState(0);
+    const [largura, setLargura] = useState("");
+    const [altura, setAltura] = useState("");
+    const [valorM2, setValorM2] = useState("");
+    const [quantidade, setQuantidade] = useState("");
 
-    const [clienteId, setClienteId] = useState(0);
+    const [clienteId, setClienteId] = useState("");
     const [clientes, setClientes] = useState<Cliente[]>([]);
 
-    const [vendedorId, setVendedorId] = useState(0);
+    const [vendedorId, setVendedorId] = useState("");
     const [vendedores, setVendedores] = useState<Vendedor[]>([]);
-
-    
    
-    const [equipamentoId, setEquipamentoId] = useState(0);
+    const [equipamentoId, setEquipamentoId] = useState("");
     const [equipamentos, setEquipamentos] = useState<Equipamento[]>([]);
-    const [acabamentoId, setAcabamentoId] = useState(0);
+    const [acabamentoId, setAcabamentoId] = useState("");
     const [acabamentos, setAcabamentos] = useState<Acabamento[]>([]);
 
     useEffect(() => {
@@ -39,18 +37,27 @@ function CriarOs() {
     function carregarInformacoes() {
         axios.get("http://localhost:5223/clientes/listar").then((resposta) =>{
             setClientes(resposta.data);
+        })
+        .catch(error =>{
+            navigate("/pages/ordemServico/listar");
         });
 
         axios.get("http://localhost:5223/vendedores/listar").then((resposta) =>{
             setVendedores(resposta.data);
+        }).catch(error =>{
+            navigate("/pages/ordemServico/listar");
         });
 
         axios.get("http://localhost:5223/equipamentos/listar").then((resposta) =>{
             setEquipamentos(resposta.data);
+        }).catch(error =>{
+            navigate("/pages/ordemServico/listar");
         });
 
         axios.get("http://localhost:5223/acabamentos/listar").then((resposta) =>{
             setAcabamentos(resposta.data);
+        }).catch(error =>{
+            navigate("/pages/ordemServico/listar");
         });
     }
 
@@ -95,7 +102,7 @@ function CriarOs() {
                             <div className="mb-3">
 
                                 <label className="form-label" style={{ color: '#161A26' }}>Cliente:</label>
-                                <select className="form-select" onChange={(e: any) => setClienteId(Number(e.target.value))} required>
+                                <select className="form-select" onChange={(e: any) => setClienteId(e.target.value)} required>
                                     <option>Selecione...</option>
 
                                     {clientes.map((cliente) => (
@@ -108,7 +115,7 @@ function CriarOs() {
 
                             <div className="mb-3">
                                 <label className="form-label" style={{ color: '#161A26' }}>Vendedor:</label>
-                                <select className="form-select" onChange={(e: any) => setVendedorId(Number(e.target.value))} required>
+                                <select className="form-select" onChange={(e: any) => setVendedorId(e.target.value)} required>
                                     <option>Selecione...</option>
 
                                     {vendedores.map((vendedor) => (
@@ -131,27 +138,27 @@ function CriarOs() {
 
                             <div className="mb-3">
                                 <label className="form-label" style={{ color: '#161A26' }}>Largura:</label>
-                                <input type="number" value={largura} className="form-control" onChange={(e) => setLargura(Number(e.target.value))} required />
+                                <input type="number" value={largura} className="form-control" onChange={(e) => setLargura(e.target.value)} required />
                             </div>
 
                             <div className="mb-3">
                                 <label className="form-label" style={{ color: '#161A26' }}>Altura:</label>
-                                <input type="number" value={altura} className="form-control" onChange={(e) => setAltura(Number(e.target.value))} required />
+                                <input type="number" value={altura} className="form-control" onChange={(e) => setAltura(e.target.value)} required />
                             </div>
 
                             <div className="mb-3">
                                 <label className="form-label" style={{ color: '#161A26' }}>Valor M2:</label>
-                                <input type="number" value={valorM2} className="form-control" onChange={(e) => setValorM2(Number(e.target.value))} required />
+                                <input type="number" value={valorM2} className="form-control" onChange={(e) => setValorM2(e.target.value)} required />
                             </div>
 
                             <div className="mb-3">
                                 <label className="form-label" style={{ color: '#161A26' }}>Quantidade:</label>
-                                <input type="number" value={quantidade} className="form-control" onChange={(e) => setQuantidade(Number(e.target.value))} required />
+                                <input type="number" value={quantidade} className="form-control" onChange={(e) => setQuantidade(e.target.value)} required />
                             </div>
 
                             <div className="mb-3">
                                 <label className="form-label" style={{ color: '#161A26' }}>Equipamento:</label>
-                                <select className="form-select" onChange={(e: any) => setEquipamentoId(Number(e.target.value))} required>
+                                <select className="form-select" onChange={(e: any) => setEquipamentoId(e.target.value)} required>
                                     <option>Selecione...</option>
 
                                     {equipamentos.map((equipamento) => (
@@ -164,7 +171,7 @@ function CriarOs() {
 
                             <div className="mb-3">
                                 <label className="form-label" style={{ color: '#161A26' }}>Acabamento:</label>
-                                <select className="form-select" onChange={(e: any) => setAcabamentoId(Number(e.target.value))} required>
+                                <select className="form-select" onChange={(e: any) => setAcabamentoId(e.target.value)} required>
                                     <option>Selecione...</option>
 
                                     {acabamentos.map((acabamento) => (

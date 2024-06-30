@@ -14,12 +14,14 @@ function AcabamentoListar() {
     }, []);
 
     function carregarAcabamento() {
-        fetch("http://localhost:5223/acabamentos/listar")
-            .then((resposta) => resposta.json())
-            .then((acabamentos: Acabamento[]) => {
-                console.table(acabamentos);
-                setAcabamento(acabamentos);
-            });
+        axios.get("http://localhost:5223/acabamentos/listar")
+        .then(resposta =>{
+            setAcabamento(resposta.data);
+        })
+        .catch((error) => {
+            console.error('Erro ao listar:', error)
+            setAcabamento([]);
+        });
     }
 
     function excluirAcabamento(acabamentoId: number) {
@@ -28,6 +30,34 @@ function AcabamentoListar() {
                 setAcabamento(resposta.data);
             })
             .catch((error) => console.error('Erro ao excluir acabamento:', error));
+    }
+
+    function lista(){
+        if(acabamento.length == 0){
+            return(
+                <tr>
+                    <td colSpan={5}>Nenhum acabamento cadastrado</td>
+                </tr>
+            );
+        }else{
+            return(
+                acabamento.map(acabamento => (
+                    <tr key={acabamento.acabamentoId}>
+                        <td>{acabamento.acabamentoId}</td>
+                        <td>{acabamento.criadoEm ? format(new Date(acabamento.criadoEm), 'dd/MM/yyyy') : 'N/A'}</td>
+                        <td>{acabamento.nome}</td>
+                        <td>{acabamento.descricao}</td>
+                        
+                        <td>
+                            <div className="btn-group" role="group">
+                                <button  className="btn mr-2" style={{backgroundColor: 'red', color: 'white'}} onClick={() => {excluirAcabamento(acabamento.acabamentoId!)}}><BsTrash /></button>
+                                <Link to={`/pages/acabamento/alterar/${acabamento.acabamentoId}`} className="btn" style={{backgroundColor: '#39F700', color: 'black'}}><BsPencil /></Link>
+                            </div>
+                        </td>
+                    </tr>
+                ))
+            );
+        }
     }
             
 
@@ -47,21 +77,7 @@ function AcabamentoListar() {
                             </tr>
                         </thead>
                         <tbody>
-                            {acabamento.map(acabamento => (
-                                <tr key={acabamento.acabamentoId}>
-                                    <td>{acabamento.acabamentoId}</td>
-                                    <td>{acabamento.criadoEm ? format(new Date(acabamento.criadoEm), 'dd/MM/yyyy') : 'N/A'}</td>
-                                    <td>{acabamento.nome}</td>
-                                    <td>{acabamento.descricao}</td>
-                                    
-                                    <td>
-                                        <div className="btn-group" role="group">
-                                            <button  className="btn mr-2" style={{backgroundColor: 'red', color: 'white'}} onClick={() => {excluirAcabamento(acabamento.acabamentoId!)}}><BsTrash /></button>
-                                            <Link to={`/pages/acabamento/alterar/${acabamento.acabamentoId}`} className="btn" style={{backgroundColor: '#39F700', color: 'black'}}><BsPencil /></Link>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))}
+                            {lista()}
                         </tbody>
                     </table>
                 </div>

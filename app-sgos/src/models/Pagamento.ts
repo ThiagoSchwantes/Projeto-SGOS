@@ -5,6 +5,7 @@ export interface Pagamento{
 }
 
 export enum Forma {
+    Indefinido = -1,
     Dinheiro = 0,
     CartaoCredito = 1,
     CartaoDebito = 2,

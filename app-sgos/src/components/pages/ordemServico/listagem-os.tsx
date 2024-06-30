@@ -22,13 +22,16 @@ function ListarOS() {
             .then(resposta =>{
                 setOrdens(resposta.data);
             })
-            .catch((error) => console.error('Erro ao listar ordem:', error));
+            .catch((error) => {
+                console.error('Erro ao listar ordem:', error)
+                setOrdens([]);
+            });
     }
 
     function excluirOrdem(ordemId: number) {
         axios.delete(`http://localhost:5223/ordem-servico/deletar/${ordemId}`)
-            .then((resposta) => {
-                setOrdens(resposta.data);
+            .then(() => {
+                carregarOrdens();
             })
             .catch((error) => console.error('Erro ao excluir ordem:', error));
     }
@@ -37,21 +40,69 @@ function ListarOS() {
         
         if(status == Status["Em Producao"] || status == Status["Em Acabamento"]){
             return(
-                <button className="btn mr-2" style={{backgroundColor: 'black', color: 'white'}} onClick={() => {alterarStatus(ordemId)}}>Alterar Status</button>
+                <div>
+                    <button className="btn mr-2 me-2" style={{backgroundColor: 'red', color: 'white'}} onClick={() => {excluirOrdem(ordemId)}}>Deletar</button>
+                    <Link to={`/pages/ordemServico/alterar/${ordemId}`} className="btn  me-2" style={{backgroundColor: '#39F700', color: 'black'}}>Alterar</Link>
+                    <button className="btn mr-2 " style={{backgroundColor: 'orange', color: 'black'}} onClick={() => {alterarStatus(ordemId)}}>Alterar Status</button>
+                </div>
             );
         }else if(status == Status["Pronto Para Entrega"]){
             return(
-                <Link to={`/pages/ordemServico/solicitarBaixa/${ordemId}`} className="btn" style={{backgroundColor: 'black', color: 'white'}}>Solicitar Baixa</Link>
+                <div>
+                    <button className="btn mr-2 me-2" style={{backgroundColor: 'red', color: 'white'}} onClick={() => {excluirOrdem(ordemId)}}>Deletar</button>
+                    <Link to={`/pages/ordemServico/alterar/${ordemId}`} className="btn me-2" style={{backgroundColor: '#39F700', color: 'black'}}>Alterar</Link>
+                    <Link to={`/pages/ordemServico/solicitarBaixa/${ordemId}`} className="btn" style={{backgroundColor: 'black', color: 'white'}}>Solicitar Baixa</Link>
+                </div>
             );
-        }        
+        }else if(status == Status["Solicitado Baixa"]){
+            return(
+                <div>Já foi solicitado a baixa</div>
+            );
+        }else if(status == Status.Baixada){
+            return(
+                <div>A Ordem de Serviço já foi finalizada</div>
+            );
+        }
     }
 
     function alterarStatus(ordemId: number) {
         axios.put(`http://localhost:5223/ordem-servico/alterarStatus/${ordemId}`)
-            .then((resposta) => {
+            .then(() => {
                 carregarOrdens();
             })
             .catch((error) => console.error('Erro ao excluir ordem:', error));
+    }
+
+
+    function lista(){
+
+        if(ordens.length == 0){
+            return(
+                <tr>
+                    <td colSpan={8}>Nenhuma Ordem de serviço cadastrada</td>
+                </tr>
+            );
+        }else{
+            return(
+                ordens.map(ordem => (
+                    <tr key={ordem.ordemServicoId}>
+                        <td>{ordem.ordemServicoId}</td>
+                        <td>{ordem.cliente?.nome}</td>
+                        <td>{ordem.vendedor?.nome}</td>
+                        <td>{ordem.dataHorarioAbertura ? format(new Date(ordem.dataHorarioAbertura), 'dd/MM/yyyy') : 'N/A'}</td>
+                        <td>{getStatusName(ordem.status)}</td>
+                        <td>R$ {ordem.valorTotal}</td>
+                        <td>R$ {ordem.valorAPagar}</td>
+                        <td>
+                            <div className="btn-group" role="group">
+                                
+                                {button(ordem.ordemServicoId!, ordem.status!)}
+                            </div>
+                        </td>
+                    </tr>
+                ))
+            );
+        }
     }
 
     return (
@@ -73,25 +124,7 @@ function ListarOS() {
                     </tr>
                 </thead>
                 <tbody>
-                
-                    {ordens.map(ordem => (
-                        <tr key={ordem.ordemServicoId}>
-                            <td>{ordem.ordemServicoId}</td>
-                            <td>{ordem.cliente?.nome}</td>
-                            <td>{ordem.vendedor?.nome}</td>
-                            <td>{ordem.dataHorarioAbertura ? format(new Date(ordem.dataHorarioAbertura), 'dd/MM/yyyy') : 'N/A'}</td>
-                            <td>{getStatusName(ordem.status)}</td>
-                            <td>R$ {ordem.valorTotal}</td>
-                            <td>R$ {ordem.valorAPagar}</td>
-                            <td>
-                                <div className="btn-group" role="group">
-                                    <button className="btn mr-2" style={{backgroundColor: 'red', color: 'white'}} onClick={() => {excluirOrdem(ordem.ordemServicoId!)}}>Deletar</button>
-                                    <Link to={`/pages/ordemServico/alterar/${ordem.ordemServicoId}`} className="btn" style={{backgroundColor: '#39F700', color: 'black'}}>Alterar</Link>
-                                    {button(ordem.ordemServicoId!, ordem.status!)}
-                                </div>
-                            </td>
-                        </tr>
-                    ))}
+                    {lista()}
                 </tbody>
             </table>
             </div>

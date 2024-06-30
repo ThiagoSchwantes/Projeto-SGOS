@@ -13,12 +13,14 @@ function ClienteListar() {
     }, []);
 
     function carregarClientes() {
-        fetch("http://localhost:5223/clientes/listar")
-            .then((resposta) => resposta.json())
-            .then((clientes: Cliente[]) => {
-                console.table(clientes);
-                setClientes(clientes);
-            });
+        axios.get("http://localhost:5223/clientes/listar")
+        .then(resposta =>{
+            setClientes(resposta.data);
+        })
+        .catch((error) => {
+            console.error('Erro ao listar ordem:', error)
+            setClientes([]);
+        });
     }
 
     function excluirCliente(clienteId: number) {
@@ -27,6 +29,39 @@ function ClienteListar() {
                 setClientes(resposta.data);
             })
             .catch((error) => console.error('Erro ao excluir cliente:', error));
+    }
+
+    function lista(){
+        if(clientes.length == 0){
+            return(
+                <tr>
+                    <td colSpan={11}>Nenhum cliente cadastrado</td>
+                </tr>
+            );
+        }else{
+            return(
+                clientes.map(cliente => (
+                    <tr key={cliente.clienteId}>
+                        <td>{cliente.clienteId}</td>
+                        <td>{cliente.dataCadastro ? format(new Date(cliente.dataCadastro), 'dd/MM/yyyy') : 'N/A'}</td>
+                        <td>{cliente.nome}</td>
+                        <td>{cliente.cpf}</td>
+                        <td>{cliente.rg}</td>
+                        <td>{cliente.cep}</td>
+                        <td>{cliente.endereco}</td>
+                        <td>{cliente.bairro}</td>
+                        <td>{cliente.cidade}</td>
+                        <td>{cliente.telefone}</td>
+                        <td>
+                            <div className="btn-group" role="group">
+                                <button className="btn mr-2" style={{backgroundColor: 'red', color: 'white'}} onClick={() => {excluirCliente(cliente.clienteId!)}}>Deletar</button>
+                                <Link to={`/pages/cliente/alterar/${cliente.clienteId}`} className="btn" style={{backgroundColor: '#39F700', color: 'black'}}>Alterar</Link>
+                            </div>
+                        </td>
+                    </tr>
+                ))
+            );
+        }
     }
 
     return (
@@ -51,26 +86,7 @@ function ClienteListar() {
                     </tr>
                 </thead>
                 <tbody>
-                    {clientes.map(cliente => (
-                        <tr key={cliente.clienteId}>
-                            <td>{cliente.clienteId}</td>
-                            <td>{cliente.dataCadastro ? format(new Date(cliente.dataCadastro), 'dd/MM/yyyy') : 'N/A'}</td>
-                            <td>{cliente.nome}</td>
-                            <td>{cliente.cpf}</td>
-                            <td>{cliente.rg}</td>
-                            <td>{cliente.cep}</td>
-                            <td>{cliente.endereco}</td>
-                            <td>{cliente.bairro}</td>
-                            <td>{cliente.cidade}</td>
-                            <td>{cliente.telefone}</td>
-                            <td>
-                                <div className="btn-group" role="group">
-                                    <button className="btn mr-2" style={{backgroundColor: 'red', color: 'white'}} onClick={() => {excluirCliente(cliente.clienteId!)}}>Deletar</button>
-                                    <Link to={`/pages/cliente/alterar/${cliente.clienteId}`} className="btn" style={{backgroundColor: '#39F700', color: 'black'}}>Alterar</Link>
-                                </div>
-                            </td>
-                        </tr>
-                    ))}
+                   {lista()}
                 </tbody>
             </table>
             </div>
