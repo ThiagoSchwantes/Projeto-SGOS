@@ -78,7 +78,6 @@ function AcabamentoListar() {
                         </thead>
                         <tbody>
                             {lista()}
-                            
                         </tbody>
                     </table>
                 </div>
